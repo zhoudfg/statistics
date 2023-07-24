@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/statistics/lib/conf"
@@ -42,6 +43,7 @@ func main() {
 
 	for ; day >= 0; day-- {
 
+		fmt.Println(day)
 		// 避免操作数据库过快休眠1s
 		time.Sleep(time.Second)
 	}
@@ -55,7 +57,6 @@ func main() {
 	//每隔一小时统计一次
 	todaySpec := "0 18 * * * ?"
 	c.AddFunc(todaySpec, func() {
-
 
 	})
 
