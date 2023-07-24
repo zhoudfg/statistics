@@ -7,6 +7,7 @@ import (
 	"github.com/statistics/lib/conf"
 	"github.com/statistics/lib/db"
 	liblog "github.com/statistics/lib/log"
+	"github.com/statistics/lib/mymongoclient"
 
 	"github.com/robfig/cron"
 )
@@ -23,6 +24,7 @@ func init() {
 
 	liblog.InitLog(conf.GetLog("basedir"), "statistics-server.log", conf.GetLogLevel())
 	db.Init("viva_vn_api", conf.GetMysqlSource("viva_vn_api"))
+	mymongoclient.Init("tianhang_im", conf.GetMongo("tianhang_im"))
 }
 
 func main() {

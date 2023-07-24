@@ -4,7 +4,8 @@ host:
   mysql: root:123456@tcp(localhost:3306)/viva_vn_api?charset=utf8mb4&parseTime=true
 mysql:
   viva_vn_api: root:123456@tcp(localhost:3306)/viva_vn_api?charset=utf8mb4&parseTime=true
-
+mongo:
+  tianhang_im: mongodb://127.0.0.1:27017/tianhang_im
 log:
   basedir: /usr/local/statistics/log
   level: info

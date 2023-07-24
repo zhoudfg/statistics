@@ -19,9 +19,14 @@ type Conf struct {
 	Log     map[string]string   `yaml:"log"`
 	File    map[string]string   `yaml:"file"`
 	Im      map[string]string   `yaml:"im"`
+	Mongo   map[string]string   `yaml:"mongo"`
 }
 
 var config Conf
+
+func GetMongo(name string) string {
+	return config.Mongo[name]
+}
 
 func GetFile(name string) string {
 	return config.File[name]
