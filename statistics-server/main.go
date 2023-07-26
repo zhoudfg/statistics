@@ -1,13 +1,14 @@
 package main
 
 import (
-	"fmt"
+
 	"time"
 
 	"github.com/statistics/lib/conf"
 	"github.com/statistics/lib/db"
 	liblog "github.com/statistics/lib/log"
 	"github.com/statistics/lib/mymongoclient"
+	"github.com/statistics/statistics-server/user/user_activity_daily"
 
 	"github.com/robfig/cron"
 )
@@ -24,6 +25,7 @@ func init() {
 
 	liblog.InitLog(conf.GetLog("basedir"), "statistics-server.log", conf.GetLogLevel())
 	db.Init("viva_vn_api", conf.GetMysqlSource("viva_vn_api"))
+	db.Init("viva_vn_statistics", conf.GetMysqlSource("viva_vn_statistics"))
 	mymongoclient.Init("tianhang_im", conf.GetMongo("tianhang_im"))
 }
 
@@ -41,11 +43,11 @@ func main() {
 	// }
 
 	// 第一次先将所有的数据统计一遍，处理后下次重启注掉这段代码
-	var day int64 = 200
+	var day int64 = 5
 
 	for ; day >= 0; day-- {
 
-		fmt.Println(day)
+		user_activity_daily.CountDaily(day)
 		// 避免操作数据库过快休眠1s
 		time.Sleep(time.Second)
 	}

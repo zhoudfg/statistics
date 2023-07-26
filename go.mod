@@ -12,6 +12,7 @@ require (
 )
 
 require (
+	github.com/deckarep/golang-set v1.8.0
 	github.com/fastly/go-utils v0.0.0-20180712184237-d95a45783239 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/jehiah/go-strftime v0.0.0-20171201141054-1d33003b3869 // indirect

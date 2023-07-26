@@ -18,7 +18,6 @@ func (*userLoginRecordDao) FindList(appId string, startTime, endTime int64) []*m
 	client := mymongoclient.Instance()
 	collection := client.Database("tianhang_im").Collection("user_login_record")
 	var ctx = context.Background()
-
 	var list = make([]*model.UserLoginRecord, 0)
 	filter := bson.D{
 		bson.E{Key: "app_id", Value: appId},
@@ -35,6 +34,22 @@ func (*userLoginRecordDao) FindList(appId string, startTime, endTime int64) []*m
 		_ = cur.Decode(item)
 		list = append(list, item)
 	}
-
 	return list
+}
+
+func (*userLoginRecordDao) FindListByDistinctUserId(appId string, startTime, endTime int64) []interface{} {
+	client := mymongoclient.Instance()
+	collection := client.Database("tianhang_im").Collection("user_login_record")
+	var ctx = context.Background()
+	filter := bson.D{
+		bson.E{Key: "app_id", Value: appId},
+		bson.E{Key: "login_time", Value: bson.M{"$gte": startTime, "$lt": endTime}},
+	}
+	userIds, err := collection.Distinct(ctx, "user_id",filter)
+	if err != nil {
+		log.Error("collection.FindOne:", err.Error())
+		return userIds
+	}
+
+	return userIds
 }
