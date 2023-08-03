@@ -43,10 +43,11 @@ func main() {
 	// }
 
 	// 第一次先将所有的数据统计一遍，处理后下次重启注掉这段代码
-	var day int64 = 5
+	var day int64 = 30
 
 	for ; day >= 0; day-- {
 
+		// 用户日活统计
 		user_activity_daily.CountDaily(day)
 		// 避免操作数据库过快休眠1s
 		time.Sleep(time.Second)
@@ -61,13 +62,15 @@ func main() {
 	//每隔一小时统计一次
 	todaySpec := "0 18 * * * ?"
 	c.AddFunc(todaySpec, func() {
-
+		// 用户日活统计
+		user_activity_daily.CountDaily(0)
 	})
 
 	// 凌晨再统计一次昨天的数据
 	yesterdaySpec := "0 30 1 * * ?"
 	c.AddFunc(yesterdaySpec, func() {
-
+		// 用户日活统计
+		user_activity_daily.CountDaily(1)
 	})
 
 	// 每月1号再统计一次上月的数据
