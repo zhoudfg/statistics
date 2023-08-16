@@ -1,4 +1,4 @@
-package user_activity_daily
+package user
 
 import (
 	"bytes"
