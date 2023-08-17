@@ -72,7 +72,7 @@ func main() {
 	}
 
 	// 第一次先将所有的数据统计一遍，处理后下次重启注掉这段代码
-	var hour int64 = 30
+	var hour int64 = 1200
 	for ; hour >= 0; hour-- {
 		// 用户时活统计
 		user_activity_hourly.CountHourly(hour)
