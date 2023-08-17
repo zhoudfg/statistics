@@ -15,7 +15,7 @@ import (
 
 // day表示几天前,0为当日
 func CountDaily(day int64) {
-	timeStr := time.Now().Format("2006-01-02")
+	timeStr := time.Now().In(time.Local).Format("2006-01-02")
 	t, _ := time.Parse("2006-01-02", timeStr)
 	startTime := t.Unix() - (8 * 3600) - 86400*day
 	endTime := t.Unix() - (8 * 3600) - (86400 * (day - 1))

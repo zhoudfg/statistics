@@ -18,7 +18,6 @@ import (
 	"github.com/statistics/statistics-server/user/user_activity_age_daily"
 	"github.com/statistics/statistics-server/user/user_activity_hourly"
 	"github.com/statistics/statistics-server/user/user_register_daily"
-
 	"github.com/robfig/cron"
 )
 
@@ -42,21 +41,9 @@ func main() {
 
 	c := cron.New()
 
-	// var month int = 0
-
-	// for ; month >= -25; month-- {
-	// 	// vip用户
-	// 	vip.CountMonth(month)
-	// 	// 避免操作数据库过快休眠1s
-	// 	time.Sleep(time.Second)
-	// }
-
 	// 第一次先将所有的数据统计一遍，处理后下次重启注掉这段代码
-	var day int64 = 4
-
+	var day int64 = 50
 	for ; day >= 0; day-- {
-		// 用户日活统计
-		// user_activity_daily.CountDaily(day)
 		// 每日用户注册数（区分性别）
 		user_register_daily.CountDaily(day)
 		// 每日登录年龄用户数（区分年龄）
@@ -80,16 +67,12 @@ func main() {
 		// 每日作品统计
 		song.CountDaily(day)
 		
-
-
-
 		// 避免操作数据库过快休眠1s
 		time.Sleep(time.Second)
 	}
 
 	// 第一次先将所有的数据统计一遍，处理后下次重启注掉这段代码
-	var hour int64 = 12
-
+	var hour int64 = 30
 	for ; hour >= 0; hour-- {
 		// 用户时活统计
 		user_activity_hourly.CountHourly(hour)
@@ -98,17 +81,9 @@ func main() {
 		time.Sleep(time.Second)
 	}
 
-	// 每天早上6点统计一次
-	dailySpec := "0 0 6 * * ?"
-	c.AddFunc(dailySpec, func() {
-
-	})
-
 	//每隔一小时统计一次
 	todaySpec := "0 18 * * * ?"
 	c.AddFunc(todaySpec, func() {
-		// 用户日活统计
-		// user_activity_daily.CountDaily(0)
 		// 每日用户注册数（区分性别）
 		user_register_daily.CountDaily(0)
 		// 每日登录年龄用户数（区分年龄）
@@ -162,10 +137,18 @@ func main() {
 		song.CountDaily(1)
 	})
 
-	// 每月1号再统计一次上月的数据
-	lastMonthSpec := "0 30 1 1 * ?"
-	c.AddFunc(lastMonthSpec, func() {
+	// 每隔半小时统计一次
+	halfHourSpec := "0 */30 * * * ?"
+	c.AddFunc(halfHourSpec, func() {
+		// 用户时活统计
+		user_activity_hourly.CountHourly(0)
+	})
 
+	// 每小时的30分统计上一小时数据
+	lastHourSpec := "0 30 * * * ?"
+	c.AddFunc(lastHourSpec, func() {
+		// 用户时活统计
+		user_activity_hourly.CountHourly(1)
 	})
 
 	c.Start()

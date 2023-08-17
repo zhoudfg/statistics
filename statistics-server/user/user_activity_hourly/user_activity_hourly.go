@@ -13,7 +13,7 @@ import (
 
 // day表示几天前,0为当日
 func CountHourly(hour int64) {
-	timeStr := time.Now().Format("2006-01-02 15:00:00")
+	timeStr := time.Now().In(time.Local).Format("2006-01-02 15:00:00")
 	t, _ := time.Parse("2006-01-02 15:00:00", timeStr)
 	startTime := t.Unix() - (8 * 3600) - 3600*hour
 	endTime := t.Unix() - (8 * 3600) - (3600 * (hour - 1))

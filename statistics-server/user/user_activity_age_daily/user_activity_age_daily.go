@@ -16,7 +16,7 @@ import (
 
 // day表示几天前,0为当日
 func CountDaily(day int64) {
-	timeStr := time.Now().Format("2006-01-02")
+	timeStr := time.Now().In(time.Local).Format("2006-01-02")
 	t, _ := time.Parse("2006-01-02", timeStr)
 	startTime := t.Unix() - (8 * 3600) - 86400*day
 	endTime := t.Unix() - (8 * 3600) - (86400 * (day - 1))
@@ -46,7 +46,7 @@ func CountDaily(day int64) {
 		for _, userAge := range userAges{
 			birthday := int64(userAge.Birthday)
 			t := time.Unix(birthday, 0)
-			currentDate := time.Now()
+			currentDate := time.Now().In(time.Local)
 			age := currentDate.Year() - t.Year()
 			// 检查是否已过生日，如果生日尚未到达，年龄减少一岁
 			if currentDate.YearDay() < t.YearDay() {
