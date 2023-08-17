@@ -28,7 +28,7 @@ func CountDaily(day int64) {
 	{
 		chargeChannels := viva_vn_api.ChargeOrdersDao.GetChargeChannelByTime(db.GetFactory("viva_vn_api").GetSession(), startTime, endTime)
 
-		var upayQty, upayDiamondQty, payermaxQty, payermaxDiamondQty, ipasspayQty, ipasspayDiamondQty, googleQty, googleDiamondQty, appleQty, appleDiamondQty, totalDiamond int64
+		var upayQty, upayDiamondQty, payermaxQty, payermaxDiamondQty, ipasspayQty, ipasspayDiamondQty, googleQty, googleDiamondQty, appleQty, appleDiamondQty, total, totalDiamond int64
 	
 		for _, item := range chargeChannels {
 			switch item.Channel {
@@ -49,7 +49,7 @@ func CountDaily(day int64) {
 					appleDiamondQty += item.Diamond
 			}
 		}
-
+		total = upayQty + payermaxQty + ipasspayQty + googleQty + appleQty
 		totalDiamond = upayDiamondQty + payermaxDiamondQty + ipasspayDiamondQty + googleDiamondQty + appleDiamondQty
 
 		var buffer bytes.Buffer
@@ -70,14 +70,15 @@ func CountDaily(day int64) {
 		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 8, googleDiamondQty))
 		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 9, appleQty))
 		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 10, appleDiamondQty))
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d")`, date, 11, totalDiamond))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 11, total))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d")`, date, 12, totalDiamond))
 		buffer.WriteString(fmt.Sprintf(`ON DUPLICATE KEY UPDATE qty = values(qty);`))
 		
 		viva_vn_statistics_dao.ChargeChannelDailyLogDao.BatchInsertOrUpdate(db.GetFactory("viva_vn_statistics").GetSession(), buffer.String())
 
 		log.Info("CountDaily charge_channel_daily_log day:", date, " startTime:", startTime, " endTime:", endTime, " result:", 
 				upayQty, upayDiamondQty, payermaxQty, payermaxDiamondQty, ipasspayQty, ipasspayDiamondQty, googleQty, googleDiamondQty,
-				appleQty, appleDiamondQty, totalDiamond )	
+				appleQty, appleDiamondQty, total, totalDiamond )	
 	}
 
 	
