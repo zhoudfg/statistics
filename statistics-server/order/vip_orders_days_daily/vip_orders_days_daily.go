@@ -34,7 +34,7 @@ func CountDaily(day int64) {
 
 		for _, item := range vipOrderDays {
 			userDaysMap[item.UserId] += item.Days
-			userOsMap[item.UserId] = item.Os
+			userOsMap[item.UserId] = item.Os.String
 		}
 
 		var days30AndroidQty, day60AndroidQty, day180AndroidQty, day360AndroidQty,

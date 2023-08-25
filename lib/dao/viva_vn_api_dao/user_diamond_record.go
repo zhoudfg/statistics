@@ -1,6 +1,8 @@
 package viva_vn_api_dao
 
 import (
+	"database/sql"
+
 	log "github.com/sirupsen/logrus"
 	"github.com/statistics/lib/dbsession"
 )
@@ -12,7 +14,7 @@ var UserDiamondRecordDao = new(userDiamondRecordDao)
 type userDiamondRecord struct{
 	Type int32
 	Qty  int64
-	Os   string
+	Os   sql.NullString
 }
 
 // 消耗钻石类型数

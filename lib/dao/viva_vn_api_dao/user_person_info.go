@@ -1,6 +1,7 @@
 package viva_vn_api_dao
 
 import (
+	"database/sql"
 	"fmt"
 	"strings"
 
@@ -15,7 +16,7 @@ var UserPersonInfoDao = new(userPersonInfoDao)
 type userPersonInfo struct{
    UserId   int64
    Birthday int64
-   Os       string
+   Os       sql.NullString
 }
 // 获取用户年龄信息
 func (*userPersonInfoDao) GetActivityUserAgeByUserIds(session *dbsession.DBSession, userIds []int64) []*userPersonInfo {

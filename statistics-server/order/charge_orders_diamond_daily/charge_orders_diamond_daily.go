@@ -32,7 +32,7 @@ func CountDaily(day int64) {
 		    diamond1400IosQty, diamond7000IosQty, diamond14000IosQty, diamond100000IosQty, diamond180000IosQty, diamond360000IosQty, totalIosQty int64
 	
 		for _, item := range chargeOrderDiamond {
-			if item.Os == "android" {
+			if item.Os.String == "android" {
 				if item.Diamond >= 1400 && item.Diamond < 7000 {
 					diamond1400AndroidQty += 1
 				}else if item.Diamond >= 7000 && item.Diamond < 14000{
@@ -46,7 +46,7 @@ func CountDaily(day int64) {
 				}else if item.Diamond >= 360000{
 					diamond360000AndroidQty += 1
 				}
-			}else if item.Os == "ios" {
+			}else if item.Os.String == "ios" {
 				if item.Diamond >= 1400 && item.Diamond < 7000 {
 					diamond1400IosQty += 1
 				}else if item.Diamond >= 7000 && item.Diamond < 14000{

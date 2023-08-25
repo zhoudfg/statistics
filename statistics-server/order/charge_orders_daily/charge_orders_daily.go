@@ -33,15 +33,15 @@ func CountDaily(day int64) {
 	
 		for _, item := range chargeOrderStatus {
 			if item.Status == 8 {
-				if item.Os == "android" {
+				if item.Os.String == "android" {
 					completeOrderAndroidQty += 1
-				}else if item.Os == "ios" {
+				}else if item.Os.String == "ios" {
 					completeOrderIosQty += 1
 				}
 			}else{
-				if item.Os == "android" {
+				if item.Os.String == "android" {
 					uncompleteOrderAndroidQty += 1
-				}else if item.Os == "ios" {
+				}else if item.Os.String == "ios" {
 					uncompleteOrderIosQty += 1
 				}
 			}

@@ -34,42 +34,42 @@ func CountDaily(day int64) {
 		for _, item := range chargeChannels {
 			switch item.Channel {
 				case "upay":
-					if item.Os == "android" {
+					if item.Os.String == "android" {
 						upayAndroidQty += 1
 						upayAndroidDiamondQty += item.Diamond
-					}else if item.Os == "ios" {
+					}else if item.Os.String == "ios" {
 						upayIosQty += 1
 						upayIosDiamondQty += item.Diamond
 					}
 				case "payermax":
-					if item.Os == "android" {
+					if item.Os.String == "android" {
 						payermaxAndroidQty += 1
 						payermaxAndroidDiamondQty += item.Diamond
-					}else if item.Os == "ios" {
+					}else if item.Os.String == "ios" {
 						payermaxIosQty += 1
 						payermaxIosDiamondQty += item.Diamond
 					}
 				case "ipasspay":
-					if item.Os == "android" {
+					if item.Os.String == "android" {
 						ipasspayAndroidQty += 1
 						ipasspayAndroidDiamondQty += item.Diamond
-					}else if item.Os == "ios" {
+					}else if item.Os.String == "ios" {
 						ipasspayIosQty += 1
 						ipasspayIosDiamondQty += item.Diamond
 					}
 				case "google":
-					if item.Os == "android" {
+					if item.Os.String == "android" {
 						googleAndroidQty += 1
 						googleAndroidDiamondQty += item.Diamond
-					}else if item.Os == "ios" {
+					}else if item.Os.String == "ios" {
 						googleIosQty += 1
 						googleIosDiamondQty += item.Diamond
 					}
 				case "apple":
-					if item.Os == "android" {
+					if item.Os.String == "android" {
 						appleAndroidQty += 1
 						appleAndroidDiamondQty += item.Diamond
-					}else if item.Os == "ios" {
+					}else if item.Os.String == "ios" {
 						appleIosQty += 1
 						appleIosDiamondQty += item.Diamond
 					}

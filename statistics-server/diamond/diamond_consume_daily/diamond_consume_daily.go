@@ -33,9 +33,9 @@ func CountDaily(day int64) {
 		for _, item := range userDiamondConsume {
 			switch item.Type {
 			case 200001:
-				if item.Os == "android" {
+				if item.Os.String == "android" {
 					sendGiftAndroidQty += item.Qty
-				} else if item.Os == "ios" {
+				} else if item.Os.String == "ios" {
 					sendGiftIosQty += item.Qty
 				}
 			}

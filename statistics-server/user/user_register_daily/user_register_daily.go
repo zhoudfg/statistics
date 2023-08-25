@@ -34,7 +34,7 @@ func CountDaily(day int64) {
 
 		for _, item := range users {
 
-			if item.Os == "android" {
+			if item.Os.String == "android" {
 				switch item.Sex.Int64 {
 				case 1:
 					manUserAndroidQty += 1
@@ -43,7 +43,7 @@ func CountDaily(day int64) {
 				case 0:
 					defaultUserAndroidQty += 1
 				}
-			} else if item.Os == "ios" {
+			} else if item.Os.String == "ios" {
 				switch item.Sex.Int64 {
 				case 1:
 					manUserIosQty += 1

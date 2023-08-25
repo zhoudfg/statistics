@@ -59,7 +59,7 @@ func CountDaily(day int64) {
 				age--
 			}
 
-			if userAge.Os == "android" {
+			if userAge.Os.String == "android" {
 				if age <= 18 {
 					age18AndroidQty += 1
 				} else if age > 18 && age <= 30 {
@@ -69,7 +69,7 @@ func CountDaily(day int64) {
 				} else if age > 50 {
 					age50AndroidQty += 1
 				}
-			} else if userAge.Os == "ios" {
+			} else if userAge.Os.String == "ios" {
 				if age <= 18 {
 					age18IosQty += 1
 				} else if age > 18 && age <= 30 {

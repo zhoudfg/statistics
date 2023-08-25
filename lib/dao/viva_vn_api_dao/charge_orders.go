@@ -1,6 +1,8 @@
 package viva_vn_api_dao
 
 import (
+	"database/sql"
+
 	log "github.com/sirupsen/logrus"
 	"github.com/statistics/lib/dbsession"
 )
@@ -14,7 +16,7 @@ type chargeOrders struct{
 	Diamond int64
 	Channel string
 	Status  int
-	Os      string
+	Os      sql.NullString
 }
 
 // 获取充值渠道

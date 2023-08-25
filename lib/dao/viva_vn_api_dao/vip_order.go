@@ -1,6 +1,7 @@
 package viva_vn_api_dao
 
 import (
+	"database/sql"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/statistics/lib/dbsession"
@@ -13,13 +14,13 @@ var VipOrderDao = new(vipOrderDao)
 type vipOrderDays struct{
 	UserId int64
 	Days   int64
-	Os   string
+	Os   sql.NullString
 }
 
 type vipOrder struct{
 	Id int64
 	UserId int64
-	Os   string
+	Os   sql.NullString
 }
 // 获取vip订单数
 func (*vipOrderDao) GetVipOrderQtyByTime(session *dbsession.DBSession, startTime int64, endTime int64) int64 {

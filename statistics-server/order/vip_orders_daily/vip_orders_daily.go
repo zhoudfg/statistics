@@ -32,9 +32,9 @@ func CountDaily(day int64) {
 		var androidQty, iosQty int64
 
 		for _, item := range vipOrders {
-			if item.Os == "android" {
+			if item.Os.String == "android" {
 				androidQty += 1
-			} else if item.Os == "ios" {
+			} else if item.Os.String == "ios" {
 				iosQty += 1
 			}
 		}

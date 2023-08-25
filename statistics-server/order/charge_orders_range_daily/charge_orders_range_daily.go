@@ -35,7 +35,7 @@ func CountDaily(day int64) {
 		userOsMap := make(map[int64]string, 0)
 		for _, item := range chargeOrderRange {
 			userDiamondMap[item.UserId] += item.Diamond
-			userOsMap[item.UserId] = item.Os
+			userOsMap[item.UserId] = item.Os.String
 		}
 
 		for userId, diamond := range userDiamondMap {

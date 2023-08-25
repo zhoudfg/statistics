@@ -33,15 +33,15 @@ func CountDaily(day int64) {
 		for _, item := range songs {
 			switch item.IsChorus {
 				case 0:
-					if item.Os == "android" {
+					if item.Os.String == "android" {
 						singleAndroidQty += 1
-					}else if item.Os == "ios" {
+					}else if item.Os.String == "ios" {
 						singleIosQty += 1
 					}
 				case 1:
-                    if item.Os == "android" {
+                    if item.Os.String == "android" {
 						chorusAndroidQty += 1
-					}else if item.Os == "ios" {
+					}else if item.Os.String == "ios" {
 						chorusIosQty += 1
 					}
 			}
