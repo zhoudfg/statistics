@@ -1,6 +1,8 @@
 package viva_vn_api_dao
 
 import (
+	"database/sql"
+
 	log "github.com/sirupsen/logrus"
 	"github.com/statistics/lib/dbsession"
 )
@@ -11,7 +13,7 @@ var SongDao = new(songDao)
 
 type song struct{
 	IsChorus int32
-	Os       string
+	Os       sql.NullString
 }
 
 func (*songDao) GetSongByTime(session *dbsession.DBSession, startTime int64, endTime int64) []*song {

@@ -14,7 +14,7 @@ var UserDao = new(userDao)
 type userInfo struct {
 	Id  int
 	Sex sql.NullInt64
-	Os  string
+	Os  sql.NullString
 }
 
 // 获取当天注册用户
