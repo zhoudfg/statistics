@@ -3,6 +3,7 @@ package main
 import (
 	"time"
 
+	"github.com/robfig/cron"
 	"github.com/statistics/lib/conf"
 	"github.com/statistics/lib/db"
 	liblog "github.com/statistics/lib/log"
@@ -11,6 +12,7 @@ import (
 	"github.com/statistics/statistics-server/diamond/diamond_output_daily"
 	"github.com/statistics/statistics-server/order/charge_channel_daily"
 	"github.com/statistics/statistics-server/order/charge_orders_daily"
+	"github.com/statistics/statistics-server/order/charge_orders_diamond_daily"
 	"github.com/statistics/statistics-server/order/charge_orders_range_daily"
 	"github.com/statistics/statistics-server/order/vip_orders_daily"
 	"github.com/statistics/statistics-server/order/vip_orders_days_daily"
@@ -18,7 +20,6 @@ import (
 	"github.com/statistics/statistics-server/user/user_activity_age_daily"
 	"github.com/statistics/statistics-server/user/user_activity_hourly"
 	"github.com/statistics/statistics-server/user/user_register_daily"
-	"github.com/robfig/cron"
 )
 
 var (
@@ -53,7 +54,7 @@ func main() {
 		// 每日充值订单状态次数（区分状态）
 		charge_orders_daily.CountDaily(day)
 		// 每日充值钻石档位
-		charge_orders_daily.CountDaily(day)
+		charge_orders_diamond_daily.CountDaily(day)
 		// 每日充值订单钻石范围用户数
 		charge_orders_range_daily.CountDaily(day)
 		// 每日vip订单数
@@ -93,7 +94,7 @@ func main() {
 		// 每日充值订单状态次数（区分状态）
 		charge_orders_daily.CountDaily(0)
 		// 每日充值钻石档位
-		charge_orders_daily.CountDaily(0)
+		charge_orders_diamond_daily.CountDaily(0)
 		// 每日充值订单钻石范围用户数
 		charge_orders_range_daily.CountDaily(0)
 		// 每日vip订单数
@@ -122,7 +123,7 @@ func main() {
 		// 每日充值订单状态次数（区分状态）
 		charge_orders_daily.CountDaily(1)
 		// 每日充值钻石档位
-		charge_orders_daily.CountDaily(1)
+		charge_orders_diamond_daily.CountDaily(1)
 		// 每日充值订单钻石范围用户数
 		charge_orders_range_daily.CountDaily(1)
 		// 每日vip订单数
