@@ -90,7 +90,7 @@ func (*chargeOrdersDao) GetChargeOrdersRangeByTime(session *dbsession.DBSession,
 
 // 获取充值订单钻石档位
 func (*chargeOrdersDao) GetChargeOrdersDiamondByTime(session *dbsession.DBSession, startTime int64, endTime int64) []*chargeOrders {
-	rows, err := session.Query("SELECT diamond user_register_info.mobile_os AS os FROM charge_orders LEFT JOIN user_register_info ON charge_orders.user_id = user_register_info.user_id WHERE complete_time >= ? AND complete_time < ?", startTime, endTime)
+	rows, err := session.Query("SELECT diamond, user_register_info.mobile_os AS os FROM charge_orders LEFT JOIN user_register_info ON charge_orders.user_id = user_register_info.user_id WHERE complete_time >= ? AND complete_time < ?", startTime, endTime)
 	if err != nil {
 		log.Error("Failed to query the user table: ", err.Error())
 		return nil
