@@ -34,7 +34,7 @@ func (*userPersonInfoDao) GetActivityUserAgeByUserIds(session *dbsession.DBSessi
 		placeholders[i] = "?"
 	}
 	
-	query := fmt.Sprintf("SELECT user_person_info.user_id AS user_id, birthday, user_register_info.mobile_os AS os FROM user_person_info LEFT JOIN user_register_info ON user_register_info.user_id = user_person_info.user_id WHERE user_id IN (%s)", strings.Join(placeholders, ", "))
+	query := fmt.Sprintf("SELECT user_person_info.user_id AS uid, birthday, user_register_info.mobile_os AS os FROM user_person_info LEFT JOIN user_register_info ON user_register_info.user_id = user_person_info.user_id WHERE user_id IN (%s)", strings.Join(placeholders, ", "))
 
 	rows, err := session.Query(query, userIdsInterface...)
 	

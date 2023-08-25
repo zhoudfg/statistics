@@ -15,7 +15,7 @@ type song struct{
 }
 
 func (*songDao) GetSongByTime(session *dbsession.DBSession, startTime int64, endTime int64) []*song {
-	rows, err := session.Query("SELECT is_chorus from song LEFT JOIN user_register_info ON user_register_info.user_id = song.user_id where create_time >= ? and create_time < ?", startTime, endTime)
+	rows, err := session.Query("SELECT is_chorus, user_register_info.mobile_os AS os from song LEFT JOIN user_register_info ON user_register_info.user_id = song.user_id where create_time >= ? and create_time < ?", startTime, endTime)
 	if err != nil {
 		log.Error("Failed to query the user table: ", err.Error())
 		return nil

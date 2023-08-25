@@ -62,7 +62,7 @@ func (*vipOrderDao) GetVipOrderByTime(session *dbsession.DBSession, startTime in
 
 // 获取vip充值天数
 func (*vipOrderDao) GetVipOrderDaysByTime(session *dbsession.DBSession, startTime int64, endTime int64) []*vipOrderDays {
-	rows, err := session.Query("SELECT vip_order.user_id AS user_id, vip_package.day as day from vip_order left join vip_package on vip_order.package_id = vip_package.id left join user_register_info on user_register_info.user_id = vip_order.user_id where vip_order.create_time >= ? and vip_order.create_time < ?", startTime, endTime)
+	rows, err := session.Query("SELECT vip_order.user_id AS user_id, vip_package.day as day, user_register_info.mobile_os AS os from vip_order left join vip_package on vip_order.package_id = vip_package.id left join user_register_info on user_register_info.user_id = vip_order.user_id where vip_order.create_time >= ? and vip_order.create_time < ?", startTime, endTime)
 	if err != nil {
 		log.Error("Failed to query the user table: ", err.Error())
 		return nil

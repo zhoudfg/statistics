@@ -52,7 +52,7 @@ func (*userDao) GetRegisterUserSexByTime(session *dbsession.DBSession, startTime
 	users := make([]*userInfo, 0)
 	for rows.Next() {
 		user := &userInfo{}
-		err := rows.Scan(&user.Id, &user.Sex)
+		err := rows.Scan(&user.Id, &user.Sex, &user.Os)
 		if err != nil {
 			log.Error("Failed to scan rows: ", err.Error())
 			return nil
