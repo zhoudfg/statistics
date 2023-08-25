@@ -20,6 +20,7 @@ type Conf struct {
 	File    map[string]string   `yaml:"file"`
 	Im      map[string]string   `yaml:"im"`
 	Mongo   map[string]string   `yaml:"mongo"`
+	AppId   string              `yaml:"app_id"`
 }
 
 var config Conf
@@ -62,6 +63,10 @@ func GetLog(name string) string {
 
 func GetLogLevel() int {
 	return LogLevelMap[GetLog("level")]
+}
+
+func GetAppId() string {
+	return config.AppId
 }
 
 func Init(servername string) {

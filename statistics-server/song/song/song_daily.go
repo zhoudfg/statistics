@@ -26,21 +26,26 @@ func CountDaily(day int64) {
 	}
 
 	{
-		
 		songs := viva_vn_api.SongDao.GetSongByTime(db.GetFactory("viva_vn_api").GetSession(), startTime, endTime)
 
-		var chorusQty, singleQty, totalQty int64
+		var  singleAndroidQty, chorusAndroidQty, singleIosQty, chorusIosQty int64
 	
 		for _, item := range songs {
 			switch item.IsChorus {
 				case 0:
-                    singleQty += 1
+					if item.Os == "android" {
+						singleAndroidQty += 1
+					}else if item.Os == "ios" {
+						singleIosQty += 1
+					}
 				case 1:
-                    chorusQty += 1
+                    if item.Os == "android" {
+						chorusAndroidQty += 1
+					}else if item.Os == "ios" {
+						chorusIosQty += 1
+					}
 			}
 		}
-
-		totalQty = chorusQty + singleQty
 
 		var buffer bytes.Buffer
 
@@ -50,15 +55,16 @@ func CountDaily(day int64) {
 			log.Error(err)
 		}
 
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 1, totalQty))
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 2, singleQty))
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d")`, date, 3, chorusQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 1, singleAndroidQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 2, chorusAndroidQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 3, singleIosQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d")`, date, 4, chorusIosQty))
 		buffer.WriteString(fmt.Sprintf(`ON DUPLICATE KEY UPDATE qty = values(qty);`))
 		
 		viva_vn_statistics_dao.SongDailyLogDao.BatchInsertOrUpdate(db.GetFactory("viva_vn_statistics").GetSession(), buffer.String())
 
 		log.Info("CountDaily song_daily_log day:", date, " startTime:", startTime, " endTime:", endTime, " result:", 
-		singleQty, chorusQty, totalQty)
+		singleAndroidQty, chorusAndroidQty, singleIosQty, chorusIosQty)
 	}
 
 	

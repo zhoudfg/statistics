@@ -29,17 +29,26 @@ func CountDaily(day int64) {
 		// 每天订单
 		chargeOrderStatus := viva_vn_api.ChargeOrdersDao.GetChargeOrdersStatusByTime(db.GetFactory("viva_vn_api").GetSession(), startTime, endTime)
 
-		var createOrderQty, completeOrderQty, uncompleteOrderQty int64
+		var createOrderAndroidQty, completeOrderAndroidQty, uncompleteOrderAndroidQty, createOrderIosQty, completeOrderIosQty, uncompleteOrderIosQty int64
 	
 		for _, item := range chargeOrderStatus {
 			if item.Status == 8 {
-				completeOrderQty += 1
+				if item.Os == "android" {
+					completeOrderAndroidQty += 1
+				}else if item.Os == "ios" {
+					completeOrderIosQty += 1
+				}
 			}else{
-				uncompleteOrderQty += 1
+				if item.Os == "android" {
+					uncompleteOrderAndroidQty += 1
+				}else if item.Os == "ios" {
+					uncompleteOrderIosQty += 1
+				}
 			}
 		}
 
-		createOrderQty = completeOrderQty + uncompleteOrderQty
+		createOrderAndroidQty = completeOrderAndroidQty + uncompleteOrderAndroidQty
+		createOrderIosQty = completeOrderIosQty + uncompleteOrderIosQty
 
 		var buffer bytes.Buffer
 
@@ -49,15 +58,18 @@ func CountDaily(day int64) {
 			log.Error(err)
 		}
 
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 1, createOrderQty))
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 2, completeOrderQty))
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d")`, date, 3, uncompleteOrderQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 1, createOrderAndroidQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 2, completeOrderAndroidQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 3, uncompleteOrderAndroidQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 4, createOrderIosQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 5, completeOrderIosQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d")`, date, 6, uncompleteOrderIosQty))
 		buffer.WriteString(fmt.Sprintf(`ON DUPLICATE KEY UPDATE qty = values(qty);`))
 		
 		viva_vn_statistics_dao.ChargeOrdersDailyLogDao.BatchInsertOrUpdate(db.GetFactory("viva_vn_statistics").GetSession(), buffer.String())
 
 		log.Info("CountDaily charge_orders_daily_log day:", date, " startTime:", startTime, " endTime:", endTime, " result:", 
-		createOrderQty, completeOrderQty, uncompleteOrderQty)	
+		createOrderAndroidQty, completeOrderAndroidQty, uncompleteOrderAndroidQty, createOrderIosQty, completeOrderIosQty, uncompleteOrderIosQty)	
 	}
 
 	

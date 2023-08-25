@@ -26,38 +26,37 @@ func CountDaily(day int64) {
 	}
 
 	{
-		
 		userDiamondConsume := viva_vn_api.UserDiamondRecordDao.GetConsumeDiamondTypeQtyByTime(db.GetFactory("viva_vn_api").GetSession(), startTime, endTime)
 
-		var sendGiftQty, totalQty int64
-	
+		var sendGiftAndroidQty, sendGiftIosQty int64
+
 		for _, item := range userDiamondConsume {
 			switch item.Type {
-				case 200001:
-                    sendGiftQty += item.Qty
+			case 200001:
+				if item.Os == "android" {
+					sendGiftAndroidQty += item.Qty
+				} else if item.Os == "ios" {
+					sendGiftIosQty += item.Qty
+				}
 			}
 		}
 
-		totalQty = sendGiftQty
-
 		var buffer bytes.Buffer
 
-        sql := fmt.Sprintf("insert into `%s` (`day`, `type`, `qty`) values ", "diamond_consume_daily_log")
+		sql := fmt.Sprintf("insert into `%s` (`day`, `type`, `qty`) values ", "diamond_consume_daily_log")
 
 		if _, err := buffer.WriteString(sql); err != nil {
 			log.Error(err)
 		}
 
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 1, totalQty))
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d")`, date, 2, sendGiftQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 1, sendGiftAndroidQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d")`, date, 2, sendGiftIosQty))
 		buffer.WriteString(fmt.Sprintf(`ON DUPLICATE KEY UPDATE qty = values(qty);`))
-		
+
 		viva_vn_statistics_dao.DiamondConsumeDailyLogDao.BatchInsertOrUpdate(db.GetFactory("viva_vn_statistics").GetSession(), buffer.String())
 
-		log.Info("CountDaily diamond_consume_daily_log day:", date, " startTime:", startTime, " endTime:", endTime, " result:", 
-		sendGiftQty, totalQty)
+		log.Info("CountDaily diamond_consume_daily_log day:", date, " startTime:", startTime, " endTime:", endTime, " result:",
+			sendGiftAndroidQty, sendGiftIosQty)
 	}
-
-	
 
 }

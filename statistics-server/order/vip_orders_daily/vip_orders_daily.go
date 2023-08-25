@@ -27,25 +27,34 @@ func CountDaily(day int64) {
 
 	{
 		// 获取vip订单数
-		vipOrdersQty := viva_vn_api.VipOrderDao.GetVipOrderByTime(db.GetFactory("viva_vn_api").GetSession(), startTime, endTime)
+		vipOrders := viva_vn_api.VipOrderDao.GetVipOrderByTime(db.GetFactory("viva_vn_api").GetSession(), startTime, endTime)
+
+		var androidQty, iosQty int64
+
+		for _, item := range vipOrders {
+			if item.Os == "android" {
+				androidQty += 1
+			} else if item.Os == "ios" {
+				iosQty += 1
+			}
+		}
 
 		var buffer bytes.Buffer
 
-        sql := fmt.Sprintf("insert into `%s` (`day`, `type`, `qty`) values ", "vip_orders_daily_log")
+		sql := fmt.Sprintf("insert into `%s` (`day`, `type`, `qty`) values ", "vip_orders_daily_log")
 
 		if _, err := buffer.WriteString(sql); err != nil {
 			log.Error(err)
 		}
 
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d")`, date, 1, vipOrdersQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 1, androidQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d")`, date, 2, iosQty))
 
 		buffer.WriteString(fmt.Sprintf(`ON DUPLICATE KEY UPDATE qty = values(qty);`))
-		
+
 		viva_vn_statistics_dao.VipOrdersDailyLogDao.BatchInsertOrUpdate(db.GetFactory("viva_vn_statistics").GetSession(), buffer.String())
 
-		log.Info("CountDaily vip_orders_daily_log day:", date, " startTime:", startTime, " endTime:", endTime, " result:", vipOrdersQty)	
+		log.Info("CountDaily vip_orders_daily_log day:", date, " startTime:", startTime, " endTime:", endTime, " result:", androidQty, iosQty)
 	}
-
-	
 
 }

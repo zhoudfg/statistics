@@ -42,7 +42,7 @@ func main() {
 	c := cron.New()
 
 	// 第一次先将所有的数据统计一遍，处理后下次重启注掉这段代码
-	var day int64 = 50
+	var day int64 = 60
 	for ; day >= 0; day-- {
 		// 每日用户注册数（区分性别）
 		user_register_daily.CountDaily(day)
@@ -72,7 +72,7 @@ func main() {
 	}
 
 	// 第一次先将所有的数据统计一遍，处理后下次重启注掉这段代码
-	var hour int64 = 1200
+	var hour int64 = 1440
 	for ; hour >= 0; hour-- {
 		// 用户时活统计
 		user_activity_hourly.CountHourly(hour)

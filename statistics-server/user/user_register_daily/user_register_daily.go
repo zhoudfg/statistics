@@ -29,41 +29,58 @@ func CountDaily(day int64) {
 		// 每天注册的用户性别 总用户数、男、女、未修改性别
 		users := viva_vn_api.UserDao.GetRegisterUserSexByTime(db.GetFactory("viva_vn_api").GetSession(), startTime, endTime)
 
-		var manUserQty, womenUserQty, defaultUserQty, totalUserQty int64
-	
+		var manUserAndroidQty, womenUserAndroidQty, defaultUserAndroidQty,
+			manUserIosQty, womenUserIosQty, defaultUserIosQty int64
+
 		for _, item := range users {
-			switch item.Sex.Int64 {
+
+			if item.Os == "android" {
+				switch item.Sex.Int64 {
 				case 1:
-					manUserQty += 1
+					manUserAndroidQty += 1
 				case 2:
-					womenUserQty += 1
+					womenUserAndroidQty += 1
 				case 0:
-					defaultUserQty += 1
+					defaultUserAndroidQty += 1
+				}
+			} else if item.Os == "ios" {
+				switch item.Sex.Int64 {
+				case 1:
+					manUserIosQty += 1
+				case 2:
+					womenUserIosQty += 1
+				case 0:
+					defaultUserIosQty += 1
+				}
 			}
 		}
-
-		totalUserQty = manUserQty + womenUserQty + defaultUserQty
+		
+		totalUserAndroidQty := manUserAndroidQty + womenUserAndroidQty + defaultUserAndroidQty
+		totalUserIosQty := manUserIosQty + womenUserIosQty + defaultUserIosQty
 
 		var buffer bytes.Buffer
 
-        sql := fmt.Sprintf("insert into `%s` (`day`, `type`, `qty`) values ", "user_register_daily_log")
+		sql := fmt.Sprintf("insert into `%s` (`day`, `type`, `qty`) values ", "user_register_daily_log")
 
 		if _, err := buffer.WriteString(sql); err != nil {
 			log.Error(err)
 		}
 
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 1, totalUserQty))
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 2, manUserQty))
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 3, womenUserQty))
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d")`, date, 4, defaultUserQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 1, totalUserAndroidQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 2, manUserAndroidQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 3, womenUserAndroidQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 4, defaultUserAndroidQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 5, totalUserIosQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 6, manUserIosQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 7, womenUserIosQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d")`, date, 8, defaultUserIosQty))
 		buffer.WriteString(fmt.Sprintf(`ON DUPLICATE KEY UPDATE qty = values(qty);`))
-		
+
 		viva_vn_statistics_dao.UserRegisterDailyLogDao.BatchInsertOrUpdate(db.GetFactory("viva_vn_statistics").GetSession(), buffer.String())
 
-		log.Info("CountDaily user_register_daily_log day:", date, " startTime:", startTime, " endTime:", endTime, " result:", 
-		manUserQty, womenUserQty, defaultUserQty, totalUserQty)	
+		log.Info("CountDaily user_register_daily_log day:", date, " startTime:", startTime, " endTime:", endTime, " result:",
+		totalUserAndroidQty, manUserAndroidQty, womenUserAndroidQty, defaultUserAndroidQty, totalUserIosQty,
+		manUserIosQty, womenUserIosQty, defaultUserIosQty )
 	}
-
-	
 
 }

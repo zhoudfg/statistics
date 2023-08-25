@@ -26,49 +26,68 @@ func CountDaily(day int64) {
 	}
 
 	{
-		
 		chargeOrderRange := viva_vn_api.ChargeOrdersDao.GetChargeOrdersRangeByTime(db.GetFactory("viva_vn_api").GetSession(), startTime, endTime)
 
-		var diamond14000Qty, diamond14000t180000Qty, diamond180000t360000Qty, diamond360000Qty int64
-	
+		var diamond14000AndroidQty, diamond14000t180000AndroidQty, diamond180000t360000AndroidQty, diamond360000AndroidQty,
+			diamond14000IosQty, diamond14000t180000IosQty, diamond180000t360000IosQty, diamond360000IosQty int64
+
 		userDiamondMap := make(map[int64]int64, 0)
+		userOsMap := make(map[int64]string, 0)
 		for _, item := range chargeOrderRange {
 			userDiamondMap[item.UserId] += item.Diamond
+			userOsMap[item.UserId] = item.Os
 		}
 
-		for _, diamond := range userDiamondMap {
-			if diamond <= 14000 {
-				diamond14000Qty += 1
-			}else if diamond > 14000 && diamond <= 180000{
-				diamond14000t180000Qty += 1
-			}else if diamond > 180000 && diamond <= 360000{
-				diamond180000t360000Qty += 1
-			}else{
-				diamond360000Qty += 1
+		for userId, diamond := range userDiamondMap {
+			os, ok := userOsMap[userId]
+			if ok {
+				if os == "android" {
+					if diamond <= 14000 {
+						diamond14000AndroidQty += 1
+					} else if diamond > 14000 && diamond <= 180000 {
+						diamond14000t180000AndroidQty += 1
+					} else if diamond > 180000 && diamond <= 360000 {
+						diamond180000t360000AndroidQty += 1
+					} else {
+						diamond360000AndroidQty += 1
+					}
+				} else if os == "ios" {
+					if diamond <= 14000 {
+						diamond14000IosQty += 1
+					} else if diamond > 14000 && diamond <= 180000 {
+						diamond14000t180000IosQty += 1
+					} else if diamond > 180000 && diamond <= 360000 {
+						diamond180000t360000IosQty += 1
+					} else {
+						diamond360000IosQty += 1
+					}
+				}
 			}
-
 		}
 
 		var buffer bytes.Buffer
 
-        sql := fmt.Sprintf("insert into `%s` (`day`, `type`, `qty`) values ", "charge_orders_range_daily_log")
+		sql := fmt.Sprintf("insert into `%s` (`day`, `type`, `qty`) values ", "charge_orders_range_daily_log")
 
 		if _, err := buffer.WriteString(sql); err != nil {
 			log.Error(err)
 		}
 
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 1, diamond14000Qty))
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 2, diamond14000t180000Qty))
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 3, diamond180000t360000Qty))
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d")`, date, 4, diamond360000Qty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 1, diamond14000AndroidQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 2, diamond14000t180000AndroidQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 3, diamond180000t360000AndroidQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 4, diamond360000AndroidQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 5, diamond14000IosQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 6, diamond14000t180000IosQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 7, diamond180000t360000IosQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d")`, date, 8, diamond360000IosQty))
 		buffer.WriteString(fmt.Sprintf(`ON DUPLICATE KEY UPDATE qty = values(qty);`))
-		
+
 		viva_vn_statistics_dao.ChargeOrdersRangeDailyLogDao.BatchInsertOrUpdate(db.GetFactory("viva_vn_statistics").GetSession(), buffer.String())
 
-		log.Info("CountDaily charge_orders_range_daily_log day:", date, " startTime:", startTime, " endTime:", endTime, " result:", 
-		diamond14000Qty, diamond14000t180000Qty, diamond180000t360000Qty, diamond360000Qty)	
+		log.Info("CountDaily charge_orders_range_daily_log day:", date, " startTime:", startTime, " endTime:", endTime, " result:",
+		diamond14000AndroidQty, diamond14000t180000AndroidQty, diamond180000t360000AndroidQty, diamond360000AndroidQty,
+		diamond14000IosQty, diamond14000t180000IosQty, diamond180000t360000IosQty, diamond360000IosQty)
 	}
-
-	
 
 }

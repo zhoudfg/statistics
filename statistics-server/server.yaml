@@ -11,3 +11,5 @@ mongo:
 log:
   basedir: /usr/local/statistics/log
   level: info
+app_id:
+  10028

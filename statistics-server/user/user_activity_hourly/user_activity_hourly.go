@@ -6,6 +6,7 @@ import (
 	"time"
 
 	log "github.com/sirupsen/logrus"
+	"github.com/statistics/lib/conf"
 	"github.com/statistics/lib/dao"
 	"github.com/statistics/lib/dao/viva_vn_statistics_dao"
 	"github.com/statistics/lib/db"
@@ -27,7 +28,7 @@ func CountHourly(hour int64) {
 
 	{
 		// 每小时活跃的用户
-		activityUser := dao.UserLoginRecordDao.FindListByHourly("10029", startTime, endTime)
+		activityUser := dao.UserLoginRecordDao.FindListByHourly(conf.GetAppId(), startTime, endTime)
 		
 		var androidUserQty, iosUserQty, totalUserQty int64
 		var userIdTeamMap = make(map[int64]int64)

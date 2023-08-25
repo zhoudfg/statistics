@@ -28,29 +28,57 @@ func CountDaily(day int64) {
 	{
 		chargeChannels := viva_vn_api.ChargeOrdersDao.GetChargeChannelByTime(db.GetFactory("viva_vn_api").GetSession(), startTime, endTime)
 
-		var upayQty, upayDiamondQty, payermaxQty, payermaxDiamondQty, ipasspayQty, ipasspayDiamondQty, googleQty, googleDiamondQty, appleQty, appleDiamondQty, total, totalDiamond int64
+		var upayAndroidQty, upayAndroidDiamondQty, payermaxAndroidQty, payermaxAndroidDiamondQty, ipasspayAndroidQty, ipasspayAndroidDiamondQty, googleAndroidQty, googleAndroidDiamondQty, appleAndroidQty, appleAndroidDiamondQty, totalAndroid, totalAndroidDiamond,
+		    upayIosQty, upayIosDiamondQty, payermaxIosQty, payermaxIosDiamondQty, ipasspayIosQty, ipasspayIosDiamondQty, googleIosQty, googleIosDiamondQty, appleIosQty, appleIosDiamondQty, totalIos, totalIosDiamond int64
 	
 		for _, item := range chargeChannels {
 			switch item.Channel {
 				case "upay":
-					upayQty += 1
-					upayDiamondQty += item.Diamond
+					if item.Os == "android" {
+						upayAndroidQty += 1
+						upayAndroidDiamondQty += item.Diamond
+					}else if item.Os == "ios" {
+						upayIosQty += 1
+						upayIosDiamondQty += item.Diamond
+					}
 				case "payermax":
-					payermaxQty += 1
-					payermaxDiamondQty += item.Diamond
+					if item.Os == "android" {
+						payermaxAndroidQty += 1
+						payermaxAndroidDiamondQty += item.Diamond
+					}else if item.Os == "ios" {
+						payermaxIosQty += 1
+						payermaxIosDiamondQty += item.Diamond
+					}
 				case "ipasspay":
-					ipasspayQty += 1
-					ipasspayDiamondQty += item.Diamond
+					if item.Os == "android" {
+						ipasspayAndroidQty += 1
+						ipasspayAndroidDiamondQty += item.Diamond
+					}else if item.Os == "ios" {
+						ipasspayIosQty += 1
+						ipasspayIosDiamondQty += item.Diamond
+					}
 				case "google":
-					googleQty += 1
-					googleDiamondQty += item.Diamond
+					if item.Os == "android" {
+						googleAndroidQty += 1
+						googleAndroidDiamondQty += item.Diamond
+					}else if item.Os == "ios" {
+						googleIosQty += 1
+						googleIosDiamondQty += item.Diamond
+					}
 				case "apple":
-					appleQty += 1
-					appleDiamondQty += item.Diamond
+					if item.Os == "android" {
+						appleAndroidQty += 1
+						appleAndroidDiamondQty += item.Diamond
+					}else if item.Os == "ios" {
+						appleIosQty += 1
+						appleIosDiamondQty += item.Diamond
+					}
 			}
 		}
-		total = upayQty + payermaxQty + ipasspayQty + googleQty + appleQty
-		totalDiamond = upayDiamondQty + payermaxDiamondQty + ipasspayDiamondQty + googleDiamondQty + appleDiamondQty
+		totalAndroid = upayAndroidQty + payermaxAndroidQty + ipasspayAndroidQty + googleAndroidQty + appleAndroidQty
+		totalAndroidDiamond = upayAndroidDiamondQty + payermaxAndroidDiamondQty + ipasspayAndroidDiamondQty + googleAndroidDiamondQty + appleAndroidDiamondQty
+		totalIos = upayIosQty + payermaxIosQty + ipasspayIosQty + googleIosQty + appleIosQty
+		totalIosDiamond = upayIosDiamondQty + payermaxIosDiamondQty + ipasspayIosDiamondQty + googleIosDiamondQty + appleIosDiamondQty
 
 		var buffer bytes.Buffer
 
@@ -60,25 +88,37 @@ func CountDaily(day int64) {
 			log.Error(err)
 		}
 
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 1, upayQty))
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 2, upayDiamondQty))
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 3, payermaxQty))
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 4, payermaxDiamondQty))
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 5, ipasspayQty))
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 6, ipasspayDiamondQty))
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 7, googleQty))
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 8, googleDiamondQty))
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 9, appleQty))
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 10, appleDiamondQty))
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 11, total))
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d")`, date, 12, totalDiamond))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 1, upayAndroidQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 2, upayAndroidDiamondQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 3, payermaxAndroidQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 4, payermaxAndroidDiamondQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 5, ipasspayAndroidQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 6, ipasspayAndroidDiamondQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 7, googleAndroidQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 8, googleAndroidDiamondQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 9, appleAndroidQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 10, appleAndroidDiamondQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 11, totalAndroid))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 12, totalAndroidDiamond))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 13, upayIosQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 14, upayIosDiamondQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 15, payermaxIosQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 16, payermaxIosDiamondQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 17, ipasspayIosQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 18, ipasspayIosDiamondQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 19, googleIosQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 20, googleIosDiamondQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 21, appleIosQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 22, appleIosDiamondQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 23, totalIos))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d")`, date, 24, totalIosDiamond))
 		buffer.WriteString(fmt.Sprintf(`ON DUPLICATE KEY UPDATE qty = values(qty);`))
 		
 		viva_vn_statistics_dao.ChargeChannelDailyLogDao.BatchInsertOrUpdate(db.GetFactory("viva_vn_statistics").GetSession(), buffer.String())
 
 		log.Info("CountDaily charge_channel_daily_log day:", date, " startTime:", startTime, " endTime:", endTime, " result:", 
-				upayQty, upayDiamondQty, payermaxQty, payermaxDiamondQty, ipasspayQty, ipasspayDiamondQty, googleQty, googleDiamondQty,
-				appleQty, appleDiamondQty, total, totalDiamond )	
+		upayAndroidQty, upayAndroidDiamondQty, payermaxAndroidQty, payermaxAndroidDiamondQty, ipasspayAndroidQty, ipasspayAndroidDiamondQty, googleAndroidQty, googleAndroidDiamondQty, appleAndroidQty, appleAndroidDiamondQty, totalAndroid, totalAndroidDiamond,
+		    upayIosQty, upayIosDiamondQty, payermaxIosQty, payermaxIosDiamondQty, ipasspayIosQty, ipasspayIosDiamondQty, googleIosQty, googleIosDiamondQty, appleIosQty, appleIosDiamondQty, totalIos, totalIosDiamond)	
 	}
 
 	

@@ -13,8 +13,9 @@ type userPersonInfoDao struct{}
 var UserPersonInfoDao = new(userPersonInfoDao)
 
 type userPersonInfo struct{
-   UserId int64
+   UserId   int64
    Birthday int64
+   Os       string
 }
 // 获取用户年龄信息
 func (*userPersonInfoDao) GetActivityUserAgeByUserIds(session *dbsession.DBSession, userIds []int64) []*userPersonInfo {
@@ -32,17 +33,21 @@ func (*userPersonInfoDao) GetActivityUserAgeByUserIds(session *dbsession.DBSessi
 	for i := range userIds {
 		placeholders[i] = "?"
 	}
-	query := fmt.Sprintf("SELECT user_id, birthday FROM user_person_info WHERE user_id IN (%s)", strings.Join(placeholders, ", "))
+	
+	query := fmt.Sprintf("SELECT user_person_info.user_id AS user_id, birthday, user_register_info.mobile_os AS os FROM user_person_info LEFT JOIN user_register_info ON user_register_info.user_id = user_person_info.user_id WHERE user_id IN (%s)", strings.Join(placeholders, ", "))
 
 	rows, err := session.Query(query, userIdsInterface...)
-	var userAges = make([]*userPersonInfo, 0)
+	
 	if err != nil {
 		log.Error("Failed to query the user table: ", err.Error())
 		return nil
 	}
+	defer rows.Close()
+
+	userAges := make([]*userPersonInfo, 0)
 	for rows.Next() {
 		user := &userPersonInfo{}
-		err := rows.Scan(&user.UserId, &user.Birthday)
+		err := rows.Scan(&user.UserId, &user.Birthday, &user.Os)
 		if err != nil {
 			log.Error("Failed to scan rows: ", err.Error())
 			return nil

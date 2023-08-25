@@ -7,6 +7,7 @@ import (
 
 	mapset "github.com/deckarep/golang-set"
 	log "github.com/sirupsen/logrus"
+	"github.com/statistics/lib/conf"
 	"github.com/statistics/lib/dao"
 	viva_vn_api "github.com/statistics/lib/dao/viva_vn_api_dao"
 	"github.com/statistics/lib/dao/viva_vn_statistics_dao"
@@ -29,12 +30,12 @@ func CountDaily(day int64) {
 
 	{
 		// 当天活跃的用户
-		activityUser := dao.UserLoginRecordDao.FindList("10029", startTime, endTime)
+		activityUser := dao.UserLoginRecordDao.FindList(conf.GetAppId(), startTime, endTime)
 		// 当天注册的新用户
 		user := viva_vn_api.UserDao.GetNewUserByTime(db.GetFactory("viva_vn_api").GetSession(), startTime, endTime)
 
 		var set = mapset.NewSetFromSlice(user)
-		var androidNewUserQty, androidOldUserQty, iosNewUserQty, iosOldUserQty int64
+		var newUserAndroidQty, oldUserAndroidQty, newUserIosQty, oldUserIosQty int64
 		var userIdTeamMap = make(map[int64]int64)
 	
 		for _, item := range activityUser {
@@ -47,20 +48,20 @@ func CountDaily(day int64) {
 			switch item.Os {
 				case "android":
 					if set.Contains(item.UserId) {
-						androidNewUserQty += 1
+						newUserAndroidQty += 1
 					}else{
-						androidOldUserQty += 1
+						oldUserAndroidQty += 1
 					}
 				case "ios":
 					if set.Contains(item.UserId) {
-						iosNewUserQty += 1
+						newUserIosQty += 1
 					}else{
-						iosOldUserQty += 1
+						oldUserIosQty += 1
 					}
 			}
 		}
-		var androidTotalUserQty = androidNewUserQty + androidOldUserQty
-		var iosTotalUserQty = iosNewUserQty + iosOldUserQty
+		totalUserAndroidQty := newUserAndroidQty + oldUserAndroidQty
+		totalUserIosQty := newUserIosQty + oldUserIosQty
 
 		var buffer bytes.Buffer
 
@@ -70,18 +71,18 @@ func CountDaily(day int64) {
 			log.Error(err)
 		}
 
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 1, androidNewUserQty))
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 2, androidOldUserQty))
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 3, androidTotalUserQty))
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 4, iosNewUserQty))
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 5, iosOldUserQty))
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d")`, date, 6, iosTotalUserQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 1, newUserAndroidQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 2, oldUserAndroidQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 3, totalUserAndroidQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 4, newUserIosQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 5, oldUserIosQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d")`, date, 6, totalUserIosQty))
 		buffer.WriteString(fmt.Sprintf(`ON DUPLICATE KEY UPDATE qty = values(qty);`))
 		
 		viva_vn_statistics_dao.UserActivityDailyLogDao.BatchInsertOrUpdate(db.GetFactory("viva_vn_statistics").GetSession(), buffer.String())
 
 		log.Info("CountDaily user_activity_daily_log day:", date, " startTime:", startTime, " endTime:", endTime, " result:", 
-				androidNewUserQty, androidOldUserQty, androidTotalUserQty, iosNewUserQty, iosOldUserQty, iosTotalUserQty)	
+		newUserAndroidQty, oldUserAndroidQty, totalUserAndroidQty, newUserIosQty, oldUserIosQty, totalUserIosQty)	
 	}
 
 	
