@@ -43,30 +43,30 @@ func main() {
 	c := cron.New()
 
 	// 第一次先将所有的数据统计一遍，处理后下次重启注掉这段代码
-	var day int64 = 60
+	var day int64 = 90
 	for ; day >= 0; day-- {
 		// 每日用户注册数（区分性别）
-		// user_register_daily.CountDaily(day)
+		user_register_daily.CountDaily(day)
 		// 每日登录年龄用户数（区分年龄）
-		// user_activity_age_daily.CountDaily(day)
+		user_activity_age_daily.CountDaily(day)
 		// 每日充值渠道次数（区分渠道、钻石）
 		charge_channel_daily.CountDaily(day)
 		// 每日充值订单状态次数（区分状态）
-		// charge_orders_daily.CountDaily(day)
+		charge_orders_daily.CountDaily(day)
 		// 每日充值钻石档位
-		// charge_orders_diamond_daily.CountDaily(day)
+		charge_orders_diamond_daily.CountDaily(day)
 		// 每日充值订单钻石范围用户数
-		// charge_orders_range_daily.CountDaily(day)
+		charge_orders_range_daily.CountDaily(day)
 		// 每日vip订单数
-		// vip_orders_daily.CountDaily(day)
+		vip_orders_daily.CountDaily(day)
 		// 每日vip订单天数
-		// vip_orders_days_daily.CountDaily(day)
+		vip_orders_days_daily.CountDaily(day)
 		// 每日钻石消耗类型
-		// diamond_consume_daily.CountDaily(day)
+		diamond_consume_daily.CountDaily(day)
 		// 每日钻石产出类型
-		// diamond_output_daily.CountDaily(day)
+		diamond_output_daily.CountDaily(day)
 		// 每日作品统计
-		// song.CountDaily(day)
+		song.CountDaily(day)
 		
 		// 避免操作数据库过快休眠1s
 		time.Sleep(time.Second)
