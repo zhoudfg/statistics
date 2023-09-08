@@ -20,7 +20,7 @@ func CountDaily(day int64) {
 	t, _ := time.Parse("2006-01-02", timeStr)
 	startTime := t.Unix() - (8 * 3600) - 86400*day
 	endTime := t.Unix() - (8 * 3600) - (86400 * (day - 1))
-	timeObj := time.Unix(int64(startTime), 0)
+	timeObj := time.Unix(int64(startTime)+(8*3600), 0).UTC()
 	date := timeObj.Format("2006-01-02")
 
 	now := time.Now().Unix()
