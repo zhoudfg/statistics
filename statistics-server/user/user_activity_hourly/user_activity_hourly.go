@@ -18,8 +18,8 @@ func CountHourly(hour int64) {
 	t, _ := time.Parse("2006-01-02 15:00:00", timeStr)
 	startTime := t.Unix() - (8 * 3600) - 3600*hour
 	endTime := t.Unix() - (8 * 3600) - (3600 * (hour - 1))
-	timeObj := time.Unix(int64(startTime), 0)
-	datetime := timeObj.Format("2006-01-02 15:04:05")
+	timeObj := time.Unix(int64(startTime + (8 * 3600)), 0)
+	datetime := timeObj.UTC().Format("2006-01-02 15:04:05")
 
 	now := time.Now().Unix()
 	if now < endTime {
