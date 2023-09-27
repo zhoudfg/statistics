@@ -28,7 +28,7 @@ func CountDaily(day int64) {
 	{
 		userDiamondConsume := viva_vn_api.UserDiamondRecordDao.GetConsumeDiamondTypeQtyByTime(db.GetFactory("viva_vn_api").GetSession(), startTime, endTime)
 
-		var sendGiftAndroidQty, sendGiftIosQty int64
+		var sendGiftAndroidQty, sendGiftIosQty, buyVipAndroidQty, buyVipIosQty, diamondRouletteAndroidQty, diamondRouletteIosQty  int64
 
 		for _, item := range userDiamondConsume {
 			switch item.Type {
@@ -38,7 +38,21 @@ func CountDaily(day int64) {
 				} else if item.Os.String == "ios" {
 					sendGiftIosQty += item.Qty
 				}
+			case 200002:
+				if item.Os.String == "android" {
+					buyVipAndroidQty += item.Qty
+				} else if item.Os.String == "ios" {
+					buyVipIosQty += item.Qty
+				}
+	
+			case 200003:
+				if item.Os.String == "android" {
+					diamondRouletteAndroidQty += item.Qty
+				} else if item.Os.String == "ios" {
+					diamondRouletteIosQty += item.Qty
+				}
 			}
+			
 		}
 
 		var buffer bytes.Buffer
@@ -50,13 +64,17 @@ func CountDaily(day int64) {
 		}
 
 		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 1, sendGiftAndroidQty))
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d")`, date, 2, sendGiftIosQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 2, sendGiftIosQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 3, buyVipAndroidQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 4, buyVipIosQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 5, diamondRouletteAndroidQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d")`, date, 6, diamondRouletteIosQty))
 		buffer.WriteString(fmt.Sprintf(`ON DUPLICATE KEY UPDATE qty = values(qty);`))
 
 		viva_vn_statistics_dao.DiamondConsumeDailyLogDao.BatchInsertOrUpdate(db.GetFactory("viva_vn_statistics").GetSession(), buffer.String())
 
 		log.Info("CountDaily diamond_consume_daily_log day:", date, " startTime:", startTime, " endTime:", endTime, " result:",
-			sendGiftAndroidQty, sendGiftIosQty)
+			sendGiftAndroidQty, sendGiftIosQty, buyVipAndroidQty, buyVipIosQty, diamondRouletteAndroidQty, diamondRouletteIosQty)
 	}
 
 }

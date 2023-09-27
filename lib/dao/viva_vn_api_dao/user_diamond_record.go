@@ -40,7 +40,7 @@ func (*userDiamondRecordDao) GetConsumeDiamondTypeQtyByTime(session *dbsession.D
 	return consumeDiamond
 }
 
-// 消耗钻石类型数
+// 产出钻石类型数
 func (*userDiamondRecordDao) GetOutputDiamondTypeQtyByTime(session *dbsession.DBSession, startTime int64, endTime int64) []*userDiamondRecord {
 	rows, err := session.Query("SELECT type, qty, user_register_info.mobile_os AS os from user_diamond_record LEFT JOIN user_register_info ON user_diamond_record.user_id = user_register_info.user_id where action = 1 AND create_time >= ? AND create_time < ?", startTime, endTime)
 	if err != nil {

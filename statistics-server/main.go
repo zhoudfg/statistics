@@ -9,7 +9,7 @@ import (
 	liblog "github.com/statistics/lib/log"
 	"github.com/statistics/lib/mymongoclient"
 	"github.com/statistics/statistics-server/diamond/diamond_consume_daily"
-	"github.com/statistics/statistics-server/diamond/diamond_output_daily"
+	// "github.com/statistics/statistics-server/diamond/diamond_output_daily"
 	"github.com/statistics/statistics-server/order/charge_channel_daily"
 	"github.com/statistics/statistics-server/order/charge_orders_daily"
 	"github.com/statistics/statistics-server/order/charge_orders_diamond_daily"
@@ -20,6 +20,7 @@ import (
 	"github.com/statistics/statistics-server/user/user_activity_age_daily"
 	"github.com/statistics/statistics-server/user/user_activity_hourly"
 	"github.com/statistics/statistics-server/user/user_register_daily"
+	"github.com/statistics/statistics-server/user/version_activity_daily"
 )
 
 var (
@@ -43,7 +44,7 @@ func main() {
 	c := cron.New()
 
 	// 第一次先将所有的数据统计一遍，处理后下次重启注掉这段代码
-	var day int64 = 90
+	var day int64 = 120
 	for ; day >= 0; day-- {
 		// 每日用户注册数（区分性别）
 		// user_register_daily.CountDaily(day)
@@ -51,8 +52,8 @@ func main() {
 		// user_activity_age_daily.CountDaily(day)
 		// 每日充值渠道次数（区分渠道、钻石）
 		// charge_channel_daily.CountDaily(day)
-		// 每日充值订单状态次数（区分状态）
-		// charge_orders_daily.CountDaily(day)
+		// 每日充值订单状态次数
+		charge_orders_daily.CountDaily(day)
 		// 每日充值钻石档位
 		// charge_orders_diamond_daily.CountDaily(day)
 		// 每日充值订单钻石范围用户数
@@ -62,11 +63,13 @@ func main() {
 		// 每日vip订单天数
 		// vip_orders_days_daily.CountDaily(day)
 		// 每日钻石消耗类型
-		// diamond_consume_daily.CountDaily(day)
+		diamond_consume_daily.CountDaily(day)
 		// 每日钻石产出类型
 		// diamond_output_daily.CountDaily(day)
 		// 每日作品统计
 		// song.CountDaily(day)
+		// 每日各版本活动分布
+		version_activity_daily.CountDaily(day)
 		
 		// 避免操作数据库过快休眠1s
 		time.Sleep(time.Second)
@@ -76,10 +79,10 @@ func main() {
 	var hour int64 = 1440
 	for ; hour >= 0; hour-- {
 		// 用户时活统计
-		user_activity_hourly.CountHourly(hour)
+		// user_activity_hourly.CountHourly(hour)
 	
 		// 避免操作数据库过快休眠1s
-		time.Sleep(time.Second)
+		// time.Sleep(time.Second)
 	}
 
 	//每隔一小时统计一次
@@ -91,7 +94,7 @@ func main() {
 		user_activity_age_daily.CountDaily(0)
 		// 每日充值渠道次数（区分渠道、钻石）
 		charge_channel_daily.CountDaily(0)
-		// 每日充值订单状态次数（区分状态）
+		// 每日充值订单状态次数
 		charge_orders_daily.CountDaily(0)
 		// 每日充值钻石档位
 		charge_orders_diamond_daily.CountDaily(0)
@@ -104,9 +107,11 @@ func main() {
 		// 每日钻石消耗类型
 		diamond_consume_daily.CountDaily(0)
 		// 每日钻石产出类型
-		diamond_output_daily.CountDaily(0)
+		// diamond_output_daily.CountDaily(0)
 		// 每日作品统计
 		song.CountDaily(0)
+		// 每日各版本活动分布
+		version_activity_daily.CountDaily(0)
 	})
 
 	// 凌晨再统计一次昨天的数据
@@ -120,7 +125,7 @@ func main() {
 		user_activity_age_daily.CountDaily(1)
 		// 每日充值渠道次数（区分渠道、钻石）
 		charge_channel_daily.CountDaily(1)
-		// 每日充值订单状态次数（区分状态）
+		// 每日充值订单状态次数
 		charge_orders_daily.CountDaily(1)
 		// 每日充值钻石档位
 		charge_orders_diamond_daily.CountDaily(1)
@@ -133,9 +138,11 @@ func main() {
 		// 每日钻石消耗类型
 		diamond_consume_daily.CountDaily(1)
 		// 每日钻石产出类型
-		diamond_output_daily.CountDaily(1)
+		// diamond_output_daily.CountDaily(1)
 		// 每日作品统计
 		song.CountDaily(1)
+		// 每日各版本活动分布
+		version_activity_daily.CountDaily(1)
 	})
 
 	// 每隔半小时统计一次

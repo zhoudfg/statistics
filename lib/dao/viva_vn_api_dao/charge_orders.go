@@ -111,3 +111,5 @@ func (*chargeOrdersDao) GetChargeOrdersDiamondByTime(session *dbsession.DBSessio
 
 	return ordersDiamond
 }
+
+// 
