@@ -34,8 +34,11 @@ func CountDaily(day int64) {
         userIdMap := make(map[int64]int64, 0)
 
         versionUserMap := make(map[string]int, 0)
+		versionNameMap := make(map[string]string, 0)
 
 		for _, item := range users {
+
+			versionNameMap[item.VersionCode] = item.VersionName
 
 			_, ok1 := userIdMap[item.UserId]
 			if ok1 {
@@ -49,8 +52,7 @@ func CountDaily(day int64) {
 				versionUserMap[item.VersionCode] += 1
 			}else{
 				versionUserMap[item.VersionCode] = 1
-			}
-			
+			}	
 		}
 
 		if len(versionUserMap) == 0 {
@@ -59,7 +61,7 @@ func CountDaily(day int64) {
 		
 		var buffer bytes.Buffer
 
-		sql := fmt.Sprintf("insert into `%s` (`day`, `type`, `qty`) values ", "version_activity_daily_log")
+		sql := fmt.Sprintf("insert into `%s` (`day`, `type`, `version`, `qty`) values ", "version_activity_daily_log")
 
 		if _, err := buffer.WriteString(sql); err != nil {
 			log.Error(err)
@@ -70,11 +72,13 @@ func CountDaily(day int64) {
 		for version, users := range versionUserMap {
 			count += 1
 
+			versionName := versionNameMap[version]
+
 			var ver, _ = strconv.Atoi(version)
 			if totalCount != count{
-				buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, ver, users))
+				buffer.WriteString(fmt.Sprintf(`("%s","%d","%s","%d"),`, date, ver, versionName, users))
 			}else{
-				buffer.WriteString(fmt.Sprintf(`("%s","%d","%d")`, date, ver, users))
+				buffer.WriteString(fmt.Sprintf(`("%s","%d","%s","%d")`, date, ver, versionName, users))
 			}
 		}
 		
@@ -82,7 +86,7 @@ func CountDaily(day int64) {
 
 		viva_vn_statistics_dao.VersionActivityDailyLogDao.BatchInsertOrUpdate(db.GetFactory("viva_vn_statistics").GetSession(), buffer.String())
 
-		log.Info("CountDaily version_activity_daily_log day:", date, " startTime:", startTime, " endTime:", endTime)
+		log.Info("CountDaily version_activity_daily_log day:", date, " startTime:", startTime, " endTime:", endTime, " result:", totalCount)
 	}
 
 }
