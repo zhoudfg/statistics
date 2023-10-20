@@ -156,7 +156,7 @@ func CountDaily(day int64) {
 
 		viva_vn_statistics_dao.AppAvgUseTimeDailyLogDao.BatchInsertOrUpdate(db.GetFactory("viva_vn_statistics").GetSession(), buffer.String())
 
-		log.Info("CountHourly app_avg_use_time_daily_log day:", date, " startTime:", startTime, " endTime:", endTime, " result:",
+		log.Info("CountDaily app_avg_use_time_daily_log day:", date, " startTime:", startTime, " endTime:", endTime, " result:",
 			userAvgUseTime, user1AvgUseTime, user2AvgUseTime, user3AvgUseTime)
 	}
 

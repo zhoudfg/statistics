@@ -22,8 +22,6 @@ type chargeOrders struct{
 	CreateTime int
 }
 
-
-
 // 获取充值渠道
 func (*chargeOrdersDao) GetChargeChannelByTime(session *dbsession.DBSession, startTime int64, endTime int64) []*chargeOrders {
 	rows, err := session.Query("SELECT charge_orders.diamond AS diamond, charge_orders.product_id AS product_id, user_register_info.mobile_os AS os FROM charge_orders LEFT JOIN user_register_info ON charge_orders.user_id = user_register_info.user_id WHERE complete_time >= ? and complete_time < ?", startTime, endTime)

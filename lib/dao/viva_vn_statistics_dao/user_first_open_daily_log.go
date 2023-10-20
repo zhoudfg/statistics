@@ -24,7 +24,7 @@ func (*userFirstOpenDailyLogDao) BatchInsertOrUpdate(session *dbsession.DBSessio
 	return int(id), nil
 }
 
-func (*userFirstOpenDailyLogDao) GetUserFirstChargeUserAmountByTime(session *dbsession.DBSession, startTime int64, endTime int64) map[int]int {
+func (*userFirstOpenDailyLogDao) GetUserFirstChargeUserAmountByTime(session *dbsession.DBSession, startTime int64, endTime int64) map[int]float64 {
 	rows, err := session.Query("SELECT user_id, qty from user_first_open_daily_log where type=1 and day >= ? and day < ?", startTime, endTime)
 	if err != nil {
 		log.Error("Failed to query the user_first_open_daily_log table: ", err.Error())
@@ -33,8 +33,8 @@ func (*userFirstOpenDailyLogDao) GetUserFirstChargeUserAmountByTime(session *dbs
 	defer rows.Close()
 
 	var userId int
-	var amount int
-	userIdAmountMap := make(map[int]int, 0)
+	var amount float64
+	userIdAmountMap := make(map[int]float64, 0)
 
 	for rows.Next() {
 
