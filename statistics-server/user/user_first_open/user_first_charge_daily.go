@@ -43,9 +43,7 @@ func CountFirstCharge() {
 
 		buffer.WriteString(fmt.Sprintf(`ON DUPLICATE KEY UPDATE day = values(day), qty = values(qty);`))
 
-		log.Info("=======",buffer.String())
-
-
+	
 		viva_vn_statistics_dao.UserFirstOpenDailyLogDao.BatchInsertOrUpdate(db.GetFactory("viva_vn_statistics").GetSession(), buffer.String())
 
 		log.Info("CountDaily user_first_open_daily_log day:", " result:", totalCount)

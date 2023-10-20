@@ -164,7 +164,7 @@ func (*chargeOrdersDao) GetChargeOrdersDiamondByTime(session *dbsession.DBSessio
 
 // 获取用户历史首充日期
 func (*chargeOrdersDao) GetFirstChargeHistoryDate(session *dbsession.DBSession) []*chargeOrders {
-	rows, err := session.Query("SELECT user_id, MIN(create_time) AS day, price FROM charge_orders WHERE status=8 GROUP BY user_id")
+	rows, err := session.Query("SELECT t.user_id as user_id, t.create_time AS day, t.price as price FROM (SELECT user_id,min(id) as id FROM charge_orders GROUP BY user_id) a LEFT JOIN charge_orders t ON t.user_id=a.user_id and t.id=a.id;")
 	if err != nil {
 		log.Error("Failed to query the charge_orders table: ", err.Error())
 		return nil
