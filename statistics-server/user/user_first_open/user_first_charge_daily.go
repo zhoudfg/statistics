@@ -34,16 +34,14 @@ func CountFirstCharge() {
 		for _, item := range userIdDate {
 			count += 1
 			if totalCount != count{
-				buffer.WriteString(fmt.Sprintf(`("%d","%d","%d","%d"),`, item.UserId, 1, item.CreateTime, item.Price))
+				buffer.WriteString(fmt.Sprintf(`("%d","%d","%d","%f"),`, item.UserId, 1, item.CreateTime, item.Price))
 			}else{
-				buffer.WriteString(fmt.Sprintf(`("%d","%d","%d","%d")`, item.UserId, 1, item.CreateTime, item.Price))
+				buffer.WriteString(fmt.Sprintf(`("%d","%d","%d","%f")`, item.UserId, 1, item.CreateTime, item.Price))
 			}
 		}
 		
-
 		buffer.WriteString(fmt.Sprintf(`ON DUPLICATE KEY UPDATE day = values(day), qty = values(qty);`))
 
-	
 		viva_vn_statistics_dao.UserFirstOpenDailyLogDao.BatchInsertOrUpdate(db.GetFactory("viva_vn_statistics").GetSession(), buffer.String())
 
 		log.Info("CountDaily user_first_open_daily_log day:", " result:", totalCount)
