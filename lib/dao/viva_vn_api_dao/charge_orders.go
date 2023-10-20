@@ -18,7 +18,7 @@ type chargeOrders struct{
 	ProductId  string
 	Status     int
 	Os         sql.NullString
-	Price      int
+	Price      float64
 	CreateTime int
 }
 
