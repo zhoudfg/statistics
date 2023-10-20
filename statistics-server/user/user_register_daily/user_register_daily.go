@@ -30,7 +30,10 @@ func CountDaily(day int64) {
 		users := viva_vn_api.UserDao.GetRegisterUserSexByTime(db.GetFactory("viva_vn_api").GetSession(), startTime, endTime)
 
 		var manUserAndroidQty, womenUserAndroidQty, defaultUserAndroidQty,
-			manUserIosQty, womenUserIosQty, defaultUserIosQty int64
+			manUserIosQty, womenUserIosQty, defaultUserIosQty, uuidQty int64
+
+
+        userUuid := make(map[string]int, 0)
 
 		for _, item := range users {
 
@@ -53,11 +56,15 @@ func CountDaily(day int64) {
 					defaultUserIosQty += 1
 				}
 			}
+
+			userUuid[item.Uuid.String] = item.Id
 		}
 		
 		totalUserAndroidQty := manUserAndroidQty + womenUserAndroidQty + defaultUserAndroidQty
 		totalUserIosQty := manUserIosQty + womenUserIosQty + defaultUserIosQty
 
+		uuidQty = int64(len(userUuid))
+		
 		var buffer bytes.Buffer
 
 		sql := fmt.Sprintf("insert into `%s` (`day`, `type`, `qty`) values ", "user_register_daily_log")
@@ -73,7 +80,8 @@ func CountDaily(day int64) {
 		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 5, totalUserIosQty))
 		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 6, manUserIosQty))
 		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 7, womenUserIosQty))
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d")`, date, 8, defaultUserIosQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d"),`, date, 8, defaultUserIosQty))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d")`, date, 9, uuidQty))
 		buffer.WriteString(fmt.Sprintf(`ON DUPLICATE KEY UPDATE qty = values(qty);`))
 
 		viva_vn_statistics_dao.UserRegisterDailyLogDao.BatchInsertOrUpdate(db.GetFactory("viva_vn_statistics").GetSession(), buffer.String())

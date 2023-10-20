@@ -12,9 +12,33 @@ type userDiamondRecordDao struct{}
 var UserDiamondRecordDao = new(userDiamondRecordDao)
 
 type userDiamondRecord struct{
-	Type int32
-	Qty  int64
-	Os   sql.NullString
+	UserId int
+	Type   int32
+	Qty    int64
+	Os     sql.NullString
+}
+
+// 用户钻石消耗记录
+func (*userDiamondRecordDao) GetConsumeDiamondRecordByTime(session *dbsession.DBSession, startTime int64, endTime int64) []*userDiamondRecord {
+	rows, err := session.Query("SELECT user_id, type, qty from user_diamond_record WHERE action = 0 AND create_time >= ? AND create_time < ?", startTime, endTime)
+	if err != nil {
+		log.Error("Failed to query the user_diamond_record table: ", err.Error())
+		return nil
+	}
+	defer rows.Close()
+
+	consumeRecord := make([]*userDiamondRecord, 0)
+	for rows.Next() {
+		consume := &userDiamondRecord{}
+		err := rows.Scan(&consume.UserId, &consume.Type, &consume.Qty)
+		if err != nil {
+			log.Error("Failed to scan rows: ", err.Error())
+			return nil
+		}
+		consumeRecord = append(consumeRecord, consume)
+	}
+
+	return consumeRecord
 }
 
 // 消耗钻石类型数

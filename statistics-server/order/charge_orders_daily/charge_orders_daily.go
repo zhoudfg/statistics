@@ -28,7 +28,7 @@ func CountDaily(day int64) {
 
 	{
 		// 每天订单
-		chargeOrderStatus := viva_vn_api.ChargeOrdersDao.GetChargeOrdersStatusByTime(db.GetFactory("viva_vn_api").GetSession(), startTime, endTime)
+		chargeOrderStatus := viva_vn_api.ChargeOrdersDao.GetChargeOrders1ByTime(db.GetFactory("viva_vn_api").GetSession(), startTime, endTime)
 
 		// 当天注册的新用户
 		user := viva_vn_api.UserDao.GetNewUserByTime(db.GetFactory("viva_vn_api").GetSession(), startTime, endTime)

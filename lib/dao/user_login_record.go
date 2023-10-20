@@ -106,4 +106,46 @@ func (*userLoginRecordDao) FindListByHourly(appId string, startTime, endTime int
 	return list
 }
 
+// 每天活跃用户
+func (*userLoginRecordDao) FindListByDaily(appId string, startTime, endTime int64) []*model.UserLoginRecord {
+	client := mymongoclient.Instance()
+	collection := client.Database("tianhang_im").Collection("user_login_record")
+	var ctx = context.Background()
+	var list = make([]*model.UserLoginRecord, 0)
+	filter := bson.D{
+		bson.E{Key: "app_id", Value: appId},
+		bson.E{
+			Key: "$or",
+			Value: bson.A{
+				bson.D{
+					bson.E{Key: "login_time", Value: bson.M{"$gte": startTime, "$lt": endTime}},
+				},
+				bson.D{
+					bson.E{Key: "login_time", Value: bson.M{"$lt": endTime}},
+					bson.E{Key: "logout_time", Value: 0},
+				},
+				bson.D{
+					bson.E{Key: "login_time", Value: bson.M{"$lt": startTime}},
+					bson.E{Key: "logout_time", Value: bson.M{"$gte": startTime}},
+				},
+			},
+		},	
+	}
+	
+	cur, err := collection.Find(ctx, filter, options.Find())
+	if err != nil {
+		log.Error("collection.FindOne:", err.Error())
+		return list
+	}
+	
+	defer cur.Close(ctx)
+	for cur.Next(ctx) {
+		item := &model.UserLoginRecord{}
+		_ = cur.Decode(item)
+		list = append(list, item)
+	}
+	
+	return list
+}
+
 
