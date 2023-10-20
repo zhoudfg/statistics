@@ -31,8 +31,9 @@ func CountDaily(day int64) {
 		// 获取充值订单
 		chargeOrders := viva_vn_api.ChargeOrdersDao.GetChargeOrders2ByTime(db.GetFactory("viva_vn_api").GetSession(), startTime, endTime)
 
-		var chargeOrderQty, chargeCompleteOrders, firstChargeUsers, firstChargeAmount int
+		var chargeOrderQty, chargeCompleteOrders, firstChargeUsers int
 
+		var firstChargeAmount float64
 		chargeUsers := make(map[int]int, 0)
         chargeCompleteUsers := make(map[int]int, 0)
 
@@ -53,7 +54,7 @@ func CountDaily(day int64) {
 
 		var buffer bytes.Buffer
 
-        sql := fmt.Sprintf("insert into charge_amount_daily_log (`day`, `charge_users`, `charge_complete_users`, `charge_orders`, `charge_complete_orders`, `first_charge_users`, `first_charge_amount`) values ('%s',%d,%d,%d,%d,%d,%d) ON DUPLICATE KEY UPDATE charge_users=%d,charge_complete_users=%d,charge_orders=%d,charge_complete_orders=%d,first_charge_users=%d,first_charge_amount=%d;", 
+        sql := fmt.Sprintf("insert into charge_amount_daily_log (`day`, `charge_users`, `charge_complete_users`, `charge_orders`, `charge_complete_orders`, `first_charge_users`, `first_charge_amount`) values ('%s',%d,%d,%d,%d,%d,%f) ON DUPLICATE KEY UPDATE charge_users=%d,charge_complete_users=%d,charge_orders=%d,charge_complete_orders=%d,first_charge_users=%d,first_charge_amount=%f;", 
 			 date, len(chargeUsers), len(chargeCompleteUsers), chargeOrderQty, chargeCompleteOrders, firstChargeUsers, firstChargeAmount, len(chargeUsers), len(chargeCompleteUsers), chargeOrderQty, chargeCompleteOrders, firstChargeUsers, firstChargeAmount)
 
 		if _, err := buffer.WriteString(sql); err != nil {
