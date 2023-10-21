@@ -132,10 +132,6 @@ func CountDaily(day int64) {
 			userTotalTime += useTime
 		}
 
-		log.Info("===", date, userTotalTime)
-		log.Info("===", date, user1TotalTime)
-		log.Info("===", date, user2TotalTime)
-		log.Info("===", date, user3TotalTime)
 
 		user1AvgUseTime := 0
 		user2AvgUseTime := 0
@@ -145,13 +141,13 @@ func CountDaily(day int64) {
 		if user1TotalTime > 0 {
 			user1AvgUseTime = user1TotalTime / len(registerUser1AppUseTime)
 		}
-		if user1TotalTime > 0 {
+		if user2TotalTime > 0 {
 			user2AvgUseTime = user2TotalTime / len(registerUser2AppUseTime)
 		}
-		if user1TotalTime > 0 {
+		if user3TotalTime > 0 {
 			user3AvgUseTime = user3TotalTime / len(registerUser3AppUseTime)
 		}
-		if user1TotalTime > 0 {
+		if userTotalTime > 0 {
 			userAvgUseTime = userTotalTime / len(registerUserAppUseTime)
 		}
 
