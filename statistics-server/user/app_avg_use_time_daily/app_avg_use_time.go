@@ -49,12 +49,22 @@ func CountDaily(day int64) {
 			var useTime int64 = 0
 		    log.Info("userTime ========", item.UserId, item.LoginTime, item.LogoutTime,  (item.LogoutTime - item.LoginTime), " Uuid=", item.Uuid)
 			if item.LoginTime >= startTime && item.LoginTime < endTime {
-				useTime = item.LoginTime - startTime
-			} else if item.LoginTime < endTime && item.LogoutTime == 0 {
-				if item.LoginTime > startTime {
+				if item.LogoutTime < endTime {
+					useTime = item.LogoutTime - item.LoginTime
+				}else if item.LogoutTime > endTime {
 					useTime = endTime - item.LoginTime
-				} else {
+				}else if item.LogoutTime == 0 {
+					if day != 0  {
+						useTime = endTime - item.LoginTime
+					}else{
+						useTime = now - item.LoginTime
+					}
+				}
+			} else if item.LoginTime < startTime && item.LogoutTime == 0 {
+				if day != 0  {
 					useTime = endTime - startTime
+				}else{
+					useTime = now - startTime
 				}
 			} else if item.LoginTime < startTime && item.LogoutTime >= startTime {
 				if item.LogoutTime < endTime {

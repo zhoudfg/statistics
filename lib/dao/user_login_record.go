@@ -86,6 +86,7 @@ func (*userLoginRecordDao) FindListByHourly(appId string, startTime, endTime int
 					bson.E{Key: "login_time", Value: bson.M{"$lt": startTime}},
 					bson.E{Key: "logout_time", Value: bson.M{"$gte": startTime}},
 				},
+			
 			},
 		},	
 	}
