@@ -132,7 +132,6 @@ func CountDaily(day int64) {
 			userTotalTime += useTime
 		}
 
-
 		user1AvgUseTime := 0
 		user2AvgUseTime := 0
 		user3AvgUseTime := 0
