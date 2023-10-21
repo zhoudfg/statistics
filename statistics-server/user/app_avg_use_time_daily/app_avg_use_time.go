@@ -47,7 +47,6 @@ func CountDaily(day int64) {
 
 		for _, item := range activityUser {
 			var useTime int64 = 0
-		    log.Info("userTime ========", item.UserId, item.LoginTime, item.LogoutTime,  (item.LogoutTime - item.LoginTime), " Uuid=", item.Uuid)
 			if item.LoginTime >= startTime && item.LoginTime < endTime {
 				if item.LogoutTime < endTime {
 					useTime = item.LogoutTime - item.LoginTime
@@ -73,8 +72,6 @@ func CountDaily(day int64) {
 					useTime = endTime - startTime
 				}
 			}
-
-			log.Info("userTime ========", int(item.UserId), "=", useTime)
 
 			// 判断是否是当天注册的用户
 			_, ok1 := registerUser1[int(item.UserId)]
