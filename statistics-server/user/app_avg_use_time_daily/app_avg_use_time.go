@@ -45,9 +45,9 @@ func CountDaily(day int64) {
 		// 大于三天注册用户的使用时长
 		registerUser3AppUseTime := make(map[int64]int, 0)
 
-		log.Info("===", len(activityUser))
+	
 		for _, item := range activityUser {
-
+			log.Info("===", date, item.LoginTime, item.LogoutTime)
 			var useTime int64 = 0
 			if item.LoginTime >= startTime && item.LoginTime < endTime {
 				if item.LogoutTime < endTime {
@@ -74,6 +74,7 @@ func CountDaily(day int64) {
 					useTime = endTime - startTime
 				}
 			}
+			log.Info("===", date, useTime)
 
 			// 判断是否是当天注册的用户
 			_, ok1 := registerUser1[int(item.UserId)]
