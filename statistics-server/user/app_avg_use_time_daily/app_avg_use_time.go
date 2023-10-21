@@ -138,16 +138,16 @@ func CountDaily(day int64) {
 		user3AvgUseTime := 0
 		userAvgUseTime := 0
 
-		if user1TotalTime > 0 {
+		if len(registerUser1AppUseTime) > 0 {
 			user1AvgUseTime = user1TotalTime / len(registerUser1AppUseTime)
 		}
-		if user2TotalTime > 0 {
+		if len(registerUser2AppUseTime) > 0 {
 			user2AvgUseTime = user2TotalTime / len(registerUser2AppUseTime)
 		}
-		if user3TotalTime > 0 {
+		if len(registerUser3AppUseTime) > 0 {
 			user3AvgUseTime = user3TotalTime / len(registerUser3AppUseTime)
 		}
-		if userTotalTime > 0 {
+		if len(registerUserAppUseTime) > 0 {
 			userAvgUseTime = userTotalTime / len(registerUserAppUseTime)
 		}
 
