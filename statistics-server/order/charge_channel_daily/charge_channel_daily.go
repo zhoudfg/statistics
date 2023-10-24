@@ -38,7 +38,7 @@ func CountDaily(day int64) {
 
 		for _, item := range chargeChannels {
 
-            channel, ok := channels[item.ProductId]
+            channel, ok := channels[item.ProductId.String]
 
 			if !ok {
 				continue
