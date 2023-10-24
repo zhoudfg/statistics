@@ -14,8 +14,8 @@ var ChargeOrdersDao = new(chargeOrdersDao)
 type chargeOrders struct{
 	UserId     int64
 	Diamond    int64
-	Channel    string
-	ProductId  string
+	Channel    sql.NullString
+	ProductId  sql.NullString
 	Status     int
 	Os         sql.NullString
 	Price      float64
