@@ -73,6 +73,8 @@ func CountDaily(day int64) {
 					useTime = endTime - startTime
 				}
 			}
+
+			log.Info("useTime====", useTime)
 			
 			// 判断是否是当天注册的用户
 			_, ok1 := registerUser1[int(item.UserId)]
