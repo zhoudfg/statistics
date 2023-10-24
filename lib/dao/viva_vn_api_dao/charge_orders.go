@@ -93,7 +93,7 @@ func (*chargeOrdersDao) GetChargeOrders1ByTime(session *dbsession.DBSession, sta
 
 // 获取充值订单2
 func (*chargeOrdersDao) GetChargeOrders2ByTime(session *dbsession.DBSession, startTime int64, endTime int64) []*chargeOrders {
-	rows, err := session.Query("SELECT user_id, charge_orders.diamond as diamond, product_id, status, price, charge_rules.channel as channel FROM charge_orders LEFT JOIN charge_rules on charge_rules.product_id=charge_orders.product_id WHERE create_time >= ? and create_time < ?", startTime, endTime)
+	rows, err := session.Query("SELECT user_id, charge_orders.diamond AS diamond, charge_orders.product_id AS product_id, status, charge_orders.price AS price, charge_rules.channel AS channel FROM charge_orders LEFT JOIN charge_rules on charge_rules.product_id=charge_orders.product_id WHERE create_time >= ? and create_time < ?", startTime, endTime)
 	if err != nil {
 		log.Error("Failed to query the charge_orders table: ", err.Error())
 		return nil
