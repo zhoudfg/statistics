@@ -49,32 +49,30 @@ func CountDaily(day int64) {
 		for _, item := range activityUser {
 			var useTime int64 = 0
 			if item.LoginTime >= startTime && item.LoginTime < endTime {
-				if item.LogoutTime < endTime {
-					useTime = item.LogoutTime - item.LoginTime
-				}else if item.LogoutTime > endTime {
-					useTime = endTime - item.LoginTime
-				}else if item.LogoutTime == 0 {
+				if item.LogoutTime == 0 {
 					if day != 0  {
 						useTime = endTime - item.LoginTime
 					}else{
 						useTime = now - item.LoginTime
 					}
+				}else if item.LogoutTime > endTime {
+					useTime = endTime - item.LoginTime
+				}else if item.LogoutTime < endTime {
+					useTime = item.LogoutTime - item.LoginTime
 				}
-				log.Info("useTime+++++", useTime)
 			} else if item.LoginTime < startTime && item.LogoutTime == 0 {
 				if day != 0  {
 					useTime = endTime - startTime
 				}else{
 					useTime = now - startTime
 				}
-				log.Info("useTime*****", useTime)
+
 			} else if item.LoginTime < startTime && item.LogoutTime >= startTime {
 				if item.LogoutTime < endTime {
 					useTime = item.LogoutTime - startTime
 				} else {
 					useTime = endTime - startTime
 				}
-				log.Info("useTime=====", useTime)
 			}
 
 			
