@@ -54,32 +54,32 @@ func CountDaily(day int64) {
 					googleChargeUsers[int(item.UserId)] = int(item.UserId)
 					if item.Status == 8 {
 						googleChargeCompleteUsers[int(item.UserId)] = int(item.UserId)
+						googleChargeAmount += item.Price
 					}
-					googleChargeAmount += item.Price
 				case "momo":
 					momoChargeUsers[int(item.UserId)] = int(item.UserId)
 					if item.Status == 8 {
 						momoChargeCompleteUsers[int(item.UserId)] = int(item.UserId)
+					 	momoChargeAmount += item.Price
 					}
-					momoChargeAmount += item.Price
 				case "vietnamVTT":
 					vietnamVTTChargeUsers[int(item.UserId)] = int(item.UserId)
 					if item.Status == 8 {
 						vietnamVTTChargeCompleteUsers[int(item.UserId)] = int(item.UserId)
+						vietnamVTTChargeAmount += item.Price
 					}
-					vietnamVTTChargeAmount += item.Price
 				case "vietnamVMS":
 					vietnamVMSChargeUsers[int(item.UserId)] = int(item.UserId)
 					if item.Status == 8 {
 						vietnamVMSChargeCompleteUsers[int(item.UserId)] = int(item.UserId)
+						vietnamVMChargeAmount += item.Price
 					}
-					vietnamVMChargeAmount += item.Price
 				case "vietnamVNP":
 					vietnamVNPChargeUsers[int(item.UserId)] = int(item.UserId)
 					if item.Status == 8 {
 						vietnamVNPChargeCompleteUsers[int(item.UserId)] = int(item.UserId)
-					}
-					vietnamVNPChargeAmount += item.Price
+						vietnamVNPChargeAmount += item.Price
+					}	
 			}
 		}
 
