@@ -92,7 +92,7 @@ func CountDaily(day int64) {
 			log.Error(err)
 			return;
 		}
-
+		log.Info("CountDaily charge_amount_daily_log day:", buffer.String())	
 		viva_vn_statistics_dao.ChargeAmountDailyLogDao.BatchInsertOrUpdate(db.GetFactory("viva_vn_statistics").GetSession(), buffer.String())
 
 		log.Info("CountDaily charge_amount_daily_log day:", date, " startTime:", startTime, " endTime:", endTime)	

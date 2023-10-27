@@ -40,7 +40,7 @@ func CountFirstCharge() {
 			}
 		}
 		
-		buffer.WriteString(fmt.Sprintf(`ON DUPLICATE KEY UPDATE day = values(day), qty = values(qty);`))
+		buffer.WriteString(fmt.Sprintf(`ON DUPLICATE KEY UPDATE day = values(day), price = values(price), price_unit = values(price_unit), diamond = values(diamond), product_id = values(product_id);`))
 
 		viva_vn_statistics_dao.UserFirstChargeLogDao.BatchInsertOrUpdate(db.GetFactory("viva_vn_statistics").GetSession(), buffer.String())
 
