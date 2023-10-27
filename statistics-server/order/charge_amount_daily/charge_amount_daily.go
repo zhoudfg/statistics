@@ -86,14 +86,18 @@ func CountDaily(day int64) {
 			log.Error(err)
 			return;
 		}
+		viva_vn_statistics_dao.ChargeAmountDailyLogDao.BatchInsertOrUpdate(db.GetFactory("viva_vn_statistics").GetSession(), buffer.String())
+		
+		buffer.Reset()
+		
 		sql2 := fmt.Sprintf("insert into charge_amount_daily_log (`day`, `type`, `charge_users`, `charge_complete_users`, `charge_orders`, `charge_complete_orders`, `first_charge_users`, `first_charge_amount`, `charge_amount`) values ('%s', %d, %d, %d, %d, %d, %d, %f, %f) ON DUPLICATE KEY UPDATE charge_users=%d, charge_complete_users=%d, charge_orders=%d, charge_complete_orders=%d, first_charge_users=%d, first_charge_amount=%f, charge_amount=%f;", date, 2, len(vndChargeUsers), len(vndChargeCompleteUsers), vndChargeOrderQty, vndChargeCompleteOrders, vndFirstChargeUsers, vndFirstChargeAmount, vndChargeAmount, len(vndChargeUsers), len(vndChargeCompleteUsers), vndChargeOrderQty, vndChargeCompleteOrders, vndFirstChargeUsers, vndFirstChargeAmount, vndChargeAmount)
 
 		if _, err := buffer.WriteString(sql2); err != nil {
 			log.Error(err)
 			return;
 		}
-		log.Info("CountDaily charge_amount_daily_log day:", buffer.String())	
 		viva_vn_statistics_dao.ChargeAmountDailyLogDao.BatchInsertOrUpdate(db.GetFactory("viva_vn_statistics").GetSession(), buffer.String())
+		
 
 		log.Info("CountDaily charge_amount_daily_log day:", date, " startTime:", startTime, " endTime:", endTime)	
 	}
