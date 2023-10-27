@@ -49,13 +49,14 @@ func CountDaily(day int64) {
 		var vietnamVNPChargeAmount float64
 	
 		for _, item := range chargeOrders {
-			switch item.Channel.String {
-				case "google":
-					googleChargeUsers[int(item.UserId)] = int(item.UserId)
+			if item.ChargeType.String == "google" {
+				googleChargeUsers[int(item.UserId)] = int(item.UserId)
 					if item.Status == 8 {
 						googleChargeCompleteUsers[int(item.UserId)] = int(item.UserId)
 						googleChargeAmount += item.Price
 					}
+			}
+			switch item.Channel.String {	
 				case "momo":
 					momoChargeUsers[int(item.UserId)] = int(item.UserId)
 					if item.Status == 8 {

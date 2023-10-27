@@ -1,4 +1,4 @@
-package user_first_open
+package user_first_charge
 
 import (
 	"bytes"
@@ -19,7 +19,7 @@ func CountFirstCharge() {
 
 		var buffer bytes.Buffer
 
-		sql := fmt.Sprintf("insert into `%s` (`user_id`, `type`, `day`, `qty`) values ", "user_first_open_daily_log")
+		sql := fmt.Sprintf("insert into `%s` (`user_id`, `price`, `price_unit`, `diamond`, `product_id`, `day`) values ", "user_first_charge_log")
 
 		if _, err := buffer.WriteString(sql); err != nil {
 			log.Error(err)
@@ -34,17 +34,17 @@ func CountFirstCharge() {
 		for _, item := range userIdDate {
 			count += 1
 			if totalCount != count{
-				buffer.WriteString(fmt.Sprintf(`("%d","%d","%d","%f"),`, item.UserId, 1, item.CreateTime, item.Price))
+				buffer.WriteString(fmt.Sprintf(`("%d","%f","%s","%d","%s","%d"),`, item.UserId, item.Price, item.PriceUnit.String, item.Diamond, item.ProductId.String, item.CreateTime))
 			}else{
-				buffer.WriteString(fmt.Sprintf(`("%d","%d","%d","%f")`, item.UserId, 1, item.CreateTime, item.Price))
+				buffer.WriteString(fmt.Sprintf(`("%d","%f","%s","%d","%s","%d")`, item.UserId, item.Price, item.PriceUnit.String, item.Diamond, item.ProductId.String, item.CreateTime))
 			}
 		}
 		
 		buffer.WriteString(fmt.Sprintf(`ON DUPLICATE KEY UPDATE day = values(day), qty = values(qty);`))
 
-		viva_vn_statistics_dao.UserFirstOpenDailyLogDao.BatchInsertOrUpdate(db.GetFactory("viva_vn_statistics").GetSession(), buffer.String())
+		viva_vn_statistics_dao.UserFirstChargeLogDao.BatchInsertOrUpdate(db.GetFactory("viva_vn_statistics").GetSession(), buffer.String())
 
-		log.Info("CountDaily user_first_open_daily_log day:", " result:", totalCount)
+		log.Info("CountDaily user_first_charge_log day:", " result:", totalCount)
 	}
 
 }

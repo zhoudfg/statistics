@@ -26,7 +26,7 @@ import (
 	app_avg_use_time "github.com/statistics/statistics-server/user/app_avg_use_time_daily"
 	"github.com/statistics/statistics-server/user/user_activity_age_daily"
 	"github.com/statistics/statistics-server/user/user_activity_hourly"
-	"github.com/statistics/statistics-server/user/user_first_open"
+	"github.com/statistics/statistics-server/user/user_first_charge"
 	"github.com/statistics/statistics-server/user/user_register_daily"
 	"github.com/statistics/statistics-server/user/version_activity_daily"
 )
@@ -52,7 +52,7 @@ func main() {
 	c := cron.New()
 
 	// 记录用户历史首充时间
-	user_first_open.CountFirstCharge()
+	user_first_charge.CountFirstCharge()
 
 	// 第一次先将所有的数据统计一遍，处理后下次重启注掉这段代码
 	var day int64 = 100
@@ -113,7 +113,7 @@ func main() {
 	todaySpec := "0 18 * * * ?"
 	c.AddFunc(todaySpec, func() {
 		// 记录用户历史首充时间
-		user_first_open.CountFirstCharge()
+		user_first_charge.CountFirstCharge()
 
 
 		// 每日用户注册数（区分性别）
