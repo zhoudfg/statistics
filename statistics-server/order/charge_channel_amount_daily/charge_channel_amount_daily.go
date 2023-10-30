@@ -28,84 +28,147 @@ func CountDaily(day int64) {
 	{
 		chargeOrders := viva_vn_api.ChargeOrdersDao.GetChargeOrders2ByTime(db.GetFactory("viva_vn_api").GetSession(), startTime, endTime)
 
-		googleChargeUsers := make(map[int]int, 0)
-		googleChargeCompleteUsers := make(map[int]int, 0)
-		var googleChargeAmount float64
+		googleUsdChargeUsers := make(map[int]int, 0)
+		googleUsdChargeCompleteUsers := make(map[int]int, 0)
+		var googleUsdChargeAmount float64
 
-		momoChargeUsers := make(map[int]int, 0)
-		momoChargeCompleteUsers := make(map[int]int, 0)
-		var momoChargeAmount float64
+		momoUsdChargeUsers := make(map[int]int, 0)
+		momoUsdChargeCompleteUsers := make(map[int]int, 0)
+		var momoUsdChargeAmount float64
 
-		vietnamVTTChargeUsers := make(map[int]int, 0)
-		vietnamVTTChargeCompleteUsers := make(map[int]int, 0)
-		var vietnamVTTChargeAmount float64
+		vietnamVTTUsdChargeUsers := make(map[int]int, 0)
+		vietnamVTTUsdChargeCompleteUsers := make(map[int]int, 0)
+		var vietnamVTTUsdChargeAmount float64
 
-		vietnamVMSChargeUsers := make(map[int]int, 0)
-		vietnamVMSChargeCompleteUsers := make(map[int]int, 0)
-		var vietnamVMChargeAmount float64
+		vietnamVMSUsdChargeUsers := make(map[int]int, 0)
+		vietnamVMSUsdChargeCompleteUsers := make(map[int]int, 0)
+		var vietnamVMUsdChargeAmount float64
 
-		vietnamVNPChargeUsers := make(map[int]int, 0)
-		vietnamVNPChargeCompleteUsers := make(map[int]int, 0)
-		var vietnamVNPChargeAmount float64
+		vietnamVNPUsdChargeUsers := make(map[int]int, 0)
+		vietnamVNPUsdChargeCompleteUsers := make(map[int]int, 0)
+		var vietnamVNPUsdChargeAmount float64
+
+		googleVndChargeUsers := make(map[int]int, 0)
+		googleVndChargeCompleteUsers := make(map[int]int, 0)
+		var googleVndChargeAmount float64
+
+		momoVndChargeUsers := make(map[int]int, 0)
+		momoVndChargeCompleteUsers := make(map[int]int, 0)
+		var momoVndChargeAmount float64
+
+		vietnamVTTVndChargeUsers := make(map[int]int, 0)
+		vietnamVTTVndChargeCompleteUsers := make(map[int]int, 0)
+		var vietnamVTTVndChargeAmount float64
+
+		vietnamVMSVndChargeUsers := make(map[int]int, 0)
+		vietnamVMSVndChargeCompleteUsers := make(map[int]int, 0)
+		var vietnamVMVndChargeAmount float64
+
+		vietnamVNPVndChargeUsers := make(map[int]int, 0)
+		vietnamVNPVndChargeCompleteUsers := make(map[int]int, 0)
+		var vietnamVNPVndChargeAmount float64
 	
 		for _, item := range chargeOrders {
-			if item.ChargeType.String == "google" {
-				googleChargeUsers[int(item.UserId)] = int(item.UserId)
-					if item.Status == 8 {
-						googleChargeCompleteUsers[int(item.UserId)] = int(item.UserId)
-						googleChargeAmount += item.Price
+
+			switch item.PriceUnit.String{
+				case "USD":
+					if item.ChargeType.String == "google" {
+						googleUsdChargeUsers[int(item.UserId)] = int(item.UserId)
+							if item.Status == 8 {
+								googleUsdChargeCompleteUsers[int(item.UserId)] = int(item.UserId)
+								googleUsdChargeAmount += item.Price
+							}
+					}
+					switch item.Channel.String {	
+						case "momo":
+							momoUsdChargeUsers[int(item.UserId)] = int(item.UserId)
+							if item.Status == 8 {
+								momoUsdChargeCompleteUsers[int(item.UserId)] = int(item.UserId)
+								momoUsdChargeAmount += item.Price
+							}
+						case "vietnamVTT":
+							vietnamVTTUsdChargeUsers[int(item.UserId)] = int(item.UserId)
+							if item.Status == 8 {
+								vietnamVTTUsdChargeCompleteUsers[int(item.UserId)] = int(item.UserId)
+								vietnamVTTUsdChargeAmount += item.Price
+							}
+						case "vietnamVMS":
+							vietnamVMSUsdChargeUsers[int(item.UserId)] = int(item.UserId)
+							if item.Status == 8 {
+								vietnamVMSUsdChargeCompleteUsers[int(item.UserId)] = int(item.UserId)
+								vietnamVMUsdChargeAmount += item.Price
+							}
+						case "vietnamVNP":
+							vietnamVNPUsdChargeUsers[int(item.UserId)] = int(item.UserId)
+							if item.Status == 8 {
+								vietnamVNPUsdChargeCompleteUsers[int(item.UserId)] = int(item.UserId)
+								vietnamVNPUsdChargeAmount += item.Price
+							}	
+					}
+				case "VND":
+					if item.ChargeType.String == "google" {
+						googleVndChargeUsers[int(item.UserId)] = int(item.UserId)
+							if item.Status == 8 {
+								googleVndChargeCompleteUsers[int(item.UserId)] = int(item.UserId)
+								googleVndChargeAmount += item.Price
+							}
+					}
+					switch item.Channel.String {	
+						case "momo":
+							momoVndChargeUsers[int(item.UserId)] = int(item.UserId)
+							if item.Status == 8 {
+								momoVndChargeCompleteUsers[int(item.UserId)] = int(item.UserId)
+								momoVndChargeAmount += item.Price
+							}
+						case "vietnamVTT":
+							vietnamVTTVndChargeUsers[int(item.UserId)] = int(item.UserId)
+							if item.Status == 8 {
+								vietnamVTTVndChargeCompleteUsers[int(item.UserId)] = int(item.UserId)
+								vietnamVTTVndChargeAmount += item.Price
+							}
+						case "vietnamVMS":
+							vietnamVMSVndChargeUsers[int(item.UserId)] = int(item.UserId)
+							if item.Status == 8 {
+								vietnamVMSVndChargeCompleteUsers[int(item.UserId)] = int(item.UserId)
+								vietnamVMVndChargeAmount += item.Price
+							}
+						case "vietnamVNP":
+							vietnamVNPVndChargeUsers[int(item.UserId)] = int(item.UserId)
+							if item.Status == 8 {
+								vietnamVNPVndChargeCompleteUsers[int(item.UserId)] = int(item.UserId)
+								vietnamVNPVndChargeAmount += item.Price
+							}	
 					}
 			}
-			switch item.Channel.String {	
-				case "momo":
-					momoChargeUsers[int(item.UserId)] = int(item.UserId)
-					if item.Status == 8 {
-						momoChargeCompleteUsers[int(item.UserId)] = int(item.UserId)
-					 	momoChargeAmount += item.Price
-					}
-				case "vietnamVTT":
-					vietnamVTTChargeUsers[int(item.UserId)] = int(item.UserId)
-					if item.Status == 8 {
-						vietnamVTTChargeCompleteUsers[int(item.UserId)] = int(item.UserId)
-						vietnamVTTChargeAmount += item.Price
-					}
-				case "vietnamVMS":
-					vietnamVMSChargeUsers[int(item.UserId)] = int(item.UserId)
-					if item.Status == 8 {
-						vietnamVMSChargeCompleteUsers[int(item.UserId)] = int(item.UserId)
-						vietnamVMChargeAmount += item.Price
-					}
-				case "vietnamVNP":
-					vietnamVNPChargeUsers[int(item.UserId)] = int(item.UserId)
-					if item.Status == 8 {
-						vietnamVNPChargeCompleteUsers[int(item.UserId)] = int(item.UserId)
-						vietnamVNPChargeAmount += item.Price
-					}	
-			}
+			
 		}
 
 		var buffer bytes.Buffer
 
-		sql := fmt.Sprintf("insert into `%s` (`day`, `type`, `charge_users`, `charge_complete_users`, `charge_amount`) values ", "charge_channel_amount_daily_log")
+		sql := fmt.Sprintf("insert into `%s` (`day`, `type`, `charge_users`, `charge_complete_users`, `charge_amount`, `price_unit`) values ", "charge_channel_amount_daily_log")
 
 		if _, err := buffer.WriteString(sql); err != nil {
 			log.Error(err)
 		}
-		
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d","%d","%f"),`, date, 1, len(googleChargeUsers), len(googleChargeCompleteUsers), googleChargeAmount))
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d","%d","%f"),`, date, 2, len(momoChargeUsers), len(momoChargeCompleteUsers),momoChargeAmount))
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d","%d","%f"),`, date, 3, len(vietnamVTTChargeUsers), len(vietnamVTTChargeCompleteUsers), vietnamVTTChargeAmount))
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d","%d","%f"),`, date, 4, len(vietnamVMSChargeUsers), len(vietnamVMSChargeCompleteUsers), vietnamVMChargeAmount))
-		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d","%d","%f")`, date, 5, len(vietnamVNPChargeUsers), len(vietnamVNPChargeCompleteUsers), vietnamVNPChargeAmount))
+	
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d","%d","%f","%d"),`, date, 1, len(googleUsdChargeUsers), len(googleUsdChargeCompleteUsers), googleUsdChargeAmount, 1))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d","%d","%f","%d"),`, date, 2, len(momoUsdChargeUsers), len(momoUsdChargeCompleteUsers),momoUsdChargeAmount, 1))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d","%d","%f","%d"),`, date, 3, len(vietnamVTTUsdChargeUsers), len(vietnamVTTUsdChargeCompleteUsers), vietnamVTTUsdChargeAmount, 1))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d","%d","%f","%d"),`, date, 4, len(vietnamVMSUsdChargeUsers), len(vietnamVMSUsdChargeCompleteUsers), vietnamVMUsdChargeAmount, 1))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d","%d","%f","%d"),`, date, 5, len(vietnamVNPUsdChargeUsers), len(vietnamVNPUsdChargeCompleteUsers), vietnamVNPUsdChargeAmount, 1))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d","%d","%f","%d"),`, date, 1, len(googleVndChargeUsers), len(googleVndChargeCompleteUsers), googleVndChargeAmount, 2))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d","%d","%f","%d"),`, date, 2, len(momoVndChargeUsers), len(momoVndChargeCompleteUsers),momoVndChargeAmount, 2))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d","%d","%f","%d"),`, date, 3, len(vietnamVTTVndChargeUsers), len(vietnamVTTVndChargeCompleteUsers), vietnamVTTVndChargeAmount, 2))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d","%d","%f","%d"),`, date, 4, len(vietnamVMSVndChargeUsers), len(vietnamVMSVndChargeCompleteUsers), vietnamVMVndChargeAmount, 2))
+		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d","%d","%f","%d")`, date, 5, len(vietnamVNPVndChargeUsers), len(vietnamVNPVndChargeCompleteUsers), vietnamVNPVndChargeAmount, 2))
 		
 		buffer.WriteString(fmt.Sprintf(`ON DUPLICATE KEY UPDATE charge_users = values(charge_complete_users),charge_complete_users = values(charge_complete_users);`))
 
 		viva_vn_statistics_dao.ChargeChannelAmountDailyLogDao.BatchInsertOrUpdate(db.GetFactory("viva_vn_statistics").GetSession(), buffer.String())
 
-		log.Info("CountDaily charge_channel_amount_daily_log day:", date, " startTime:", startTime, " endTime:", endTime, " result:",
-		len(googleChargeUsers), len(googleChargeCompleteUsers), googleChargeAmount,
-			len(momoChargeUsers), len(momoChargeCompleteUsers), momoChargeAmount, len(vietnamVTTChargeUsers), len(vietnamVTTChargeCompleteUsers), vietnamVTTChargeAmount,
-				len(vietnamVMSChargeUsers), len(vietnamVMSChargeCompleteUsers), vietnamVMChargeAmount, len(vietnamVNPChargeUsers), len(vietnamVNPChargeCompleteUsers), vietnamVNPChargeAmount)
+		log.Info("CountDaily charge_channel_amount_daily_log day:", date, " startTime:", startTime, " endTime:", endTime)
 	}
+
+	
 
 }
