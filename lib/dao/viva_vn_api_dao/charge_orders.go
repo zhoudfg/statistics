@@ -26,7 +26,7 @@ type chargeOrders struct{
 
 // 获取充值渠道
 func (*chargeOrdersDao) GetChargeChannelByTime(session *dbsession.DBSession, startTime int64, endTime int64) []*chargeOrders {
-	rows, err := session.Query("SELECT charge_orders.diamond AS diamond, charge_orders.product_id AS product_id, user_register_info.mobile_os AS os FROM charge_orders LEFT JOIN user_register_info ON charge_orders.user_id = user_register_info.user_id WHERE complete_time >= ? and complete_time < ?", startTime, endTime)
+	rows, err := session.Query("SELECT charge_orders.diamond AS diamond, charge_orders.product_id AS product_id, user_register_info.mobile_os AS os, charge_orders.charge_type AS charge_type FROM charge_orders LEFT JOIN user_register_info ON charge_orders.user_id = user_register_info.user_id WHERE complete_time >= ? and complete_time < ?", startTime, endTime)
 	if err != nil {
 		log.Error("Failed to query the charge_orders table: ", err.Error())
 		return nil
@@ -36,7 +36,7 @@ func (*chargeOrdersDao) GetChargeChannelByTime(session *dbsession.DBSession, sta
 	chargeChannels := make([]*chargeOrders, 0)
 	for rows.Next() {
         channel := &chargeOrders{}
-		err := rows.Scan(&channel.Diamond, &channel.ProductId, &channel.Os)
+		err := rows.Scan(&channel.Diamond, &channel.ProductId, &channel.Os, &channel.ChargeType)
 		if err != nil {
 			log.Error("Failed to scan rows: ", err.Error())
 			return nil
@@ -95,7 +95,7 @@ func (*chargeOrdersDao) GetChargeOrders1ByTime(session *dbsession.DBSession, sta
 
 // 获取充值订单2
 func (*chargeOrdersDao) GetChargeOrders2ByTime(session *dbsession.DBSession, startTime int64, endTime int64) []*chargeOrders {
-	rows, err := session.Query("SELECT user_id, charge_orders.diamond AS diamond, charge_orders.product_id AS product_id, status, charge_orders.price AS price, charge_orders.price_unit AS price_unit, charge_rules.channel AS channel FROM charge_orders LEFT JOIN charge_rules on charge_rules.product_id=charge_orders.product_id WHERE create_time >= ? and create_time < ?", startTime, endTime)
+	rows, err := session.Query("SELECT user_id, charge_orders.diamond AS diamond, charge_orders.product_id AS product_id, status, charge_orders.price AS price, charge_orders.price_unit AS price_unit, charge_rules.channel AS channel, charge_orders.charge_type AS charge_type FROM charge_orders LEFT JOIN charge_rules on charge_rules.product_id=charge_orders.product_id WHERE create_time >= ? and create_time < ?", startTime, endTime)
 	if err != nil {
 		log.Error("Failed to query the charge_orders table: ", err.Error())
 		return nil
@@ -105,7 +105,7 @@ func (*chargeOrdersDao) GetChargeOrders2ByTime(session *dbsession.DBSession, sta
 	orders := make([]*chargeOrders, 0)
 	for rows.Next() {
         chargeOrder := &chargeOrders{}
-		err := rows.Scan(&chargeOrder.UserId, &chargeOrder.Diamond, &chargeOrder.ProductId, &chargeOrder.Status, &chargeOrder.Price, &chargeOrder.PriceUnit, &chargeOrder.Channel)
+		err := rows.Scan(&chargeOrder.UserId, &chargeOrder.Diamond, &chargeOrder.ProductId, &chargeOrder.Status, &chargeOrder.Price, &chargeOrder.PriceUnit, &chargeOrder.Channel, &chargeOrder.ChargeType)
 		if err != nil {
 			log.Error("Failed to scan rows: ", err.Error())
 			return nil

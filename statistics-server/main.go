@@ -62,7 +62,7 @@ func main() {
 		// 每日登录年龄用户数（区分年龄）
 		// user_activity_age_daily.CountDaily(day)
 		// 每日充值渠道次数（区分渠道、钻石）
-		// charge_channel_daily.CountDaily(day)
+		charge_channel_daily.CountDaily(day)
 		// 每日充值订单状态次数
 		// charge_orders_daily.CountDaily(day)
 		// 每日充值钻石档位

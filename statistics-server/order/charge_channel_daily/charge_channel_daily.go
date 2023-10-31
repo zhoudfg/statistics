@@ -44,10 +44,12 @@ func CountDaily(day int64) {
 				continue
 			}
 
+			if item.ChargeType.String == "google" {
+				googleAndroidQty += 1
+				googleAndroidDiamondQty += item.Diamond
+			}
+
 			switch channel {
-				case "google":
-					googleAndroidQty += 1
-					googleAndroidDiamondQty += item.Diamond
 				case "momo":
 					if item.Os.String == "android" {
 						momoAndroidQty += 1
