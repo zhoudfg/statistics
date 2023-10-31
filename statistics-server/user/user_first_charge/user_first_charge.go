@@ -28,7 +28,7 @@ func CountFirstCharge(day int64) {
 	
 	{
 		// 获取用户历史首充日期
-		userIdDate := viva_vn_api_dao.ChargeOrdersDao.GetFirstChargeHistoryDate(db.GetFactory("viva_vn_api").GetSession(), startTime, endTime)
+		chargeOrders := viva_vn_api_dao.ChargeOrdersDao.GetFirstChargeHistoryDate(db.GetFactory("viva_vn_api").GetSession(), startTime, endTime)
 
 		var buffer bytes.Buffer
 
@@ -38,13 +38,13 @@ func CountFirstCharge(day int64) {
 			log.Error(err)
 		}
 
-        totalCount := len(userIdDate)
+        totalCount := len(chargeOrders)
 
 		if totalCount == 0 {
 			return;
 		}
 		count := 0
-		for _, item := range userIdDate {
+		for _, item := range chargeOrders {
 			count += 1
 			if totalCount != count{
 				buffer.WriteString(fmt.Sprintf(`("%d","%f","%s","%d","%s","%d"),`, item.UserId, item.Price, item.PriceUnit.String, item.Diamond, item.ProductId.String, item.CreateTime))
@@ -53,11 +53,11 @@ func CountFirstCharge(day int64) {
 			}
 		}
 		
-		buffer.WriteString(fmt.Sprintf(`ON DUPLICATE KEY UPDATE day = values(day), price = values(price), price_unit = values(price_unit), diamond = values(diamond), product_id = values(product_id);`))
+		buffer.WriteString(fmt.Sprintf(`ON DUPLICATE KEY UPDATE user_id = values(user_id);`))
 
 		viva_vn_statistics_dao.UserFirstChargeLogDao.BatchInsertOrUpdate(db.GetFactory("viva_vn_statistics").GetSession(), buffer.String())
 
-		log.Info("CountDaily user_first_charge_log day:", " result:", date)
+		log.Info("CountDaily user_first_charge_log day:", date)
 	}
 
 }

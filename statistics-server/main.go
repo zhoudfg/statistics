@@ -51,12 +51,11 @@ func main() {
 
 	c := cron.New()
 
-	// 记录用户历史首充时间
-	user_first_charge.CountFirstCharge(0)
-
 	// 第一次先将所有的数据统计一遍，处理后下次重启注掉这段代码
 	var day int64 = 120
 	for ; day >= 0; day-- {
+		// 记录用户历史首充时间
+		user_first_charge.CountFirstCharge(day)
 		// 每日用户注册数（区分性别）
 		// user_register_daily.CountDaily(day)
 		// 每日登录年龄用户数（区分年龄）
@@ -115,7 +114,6 @@ func main() {
 		// 记录用户历史首充时间
 		user_first_charge.CountFirstCharge(0)
 
-
 		// 每日用户注册数（区分性别）
 		user_register_daily.CountDaily(0)
 		// 每日登录年龄用户数（区分年龄）
@@ -158,6 +156,8 @@ func main() {
 	// 凌晨再统计一次昨天的数据
 	yesterdaySpec := "0 30 1 * * ?"
 	c.AddFunc(yesterdaySpec, func() {
+		// 记录用户历史首充时间
+		user_first_charge.CountFirstCharge(1)
 		// 用户日活统计
 		// user_activity_daily.CountDaily(1)
 		// 每日用户注册数（区分性别）
