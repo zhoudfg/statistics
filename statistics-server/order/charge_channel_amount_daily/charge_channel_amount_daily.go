@@ -162,7 +162,7 @@ func CountDaily(day int64) {
 		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d","%d","%f","%d"),`, date, 4, len(vietnamVMSVndChargeUsers), len(vietnamVMSVndChargeCompleteUsers), vietnamVMVndChargeAmount, 2))
 		buffer.WriteString(fmt.Sprintf(`("%s","%d","%d","%d","%f","%d")`, date, 5, len(vietnamVNPVndChargeUsers), len(vietnamVNPVndChargeCompleteUsers), vietnamVNPVndChargeAmount, 2))
 		
-		buffer.WriteString(fmt.Sprintf(`ON DUPLICATE KEY UPDATE charge_users = values(charge_complete_users),charge_complete_users = values(charge_complete_users);`))
+		buffer.WriteString(fmt.Sprintf(`ON DUPLICATE KEY UPDATE charge_users = values(charge_complete_users),charge_complete_users = values(charge_complete_users),charge_amount = values(charge_amount);`))
 
 		viva_vn_statistics_dao.ChargeChannelAmountDailyLogDao.BatchInsertOrUpdate(db.GetFactory("viva_vn_statistics").GetSession(), buffer.String())
 
