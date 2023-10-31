@@ -3,6 +3,7 @@ package user_first_charge
 import (
 	"bytes"
 	"fmt"
+	"time"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/statistics/lib/dao/viva_vn_api_dao"
@@ -11,11 +12,23 @@ import (
 )
 
 // day表示几天前,0为当日
-func CountFirstCharge() {
+func CountFirstCharge(day int64) {
+
+	timeStr := time.Now().In(time.Local).Format("2006-01-02")
+	t, _ := time.Parse("2006-01-02", timeStr)
+	startTime := t.Unix() - (8 * 3600) - 86400*day
+	endTime := t.Unix() - (8 * 3600) - (86400 * (day - 1))
+	timeObj := time.Unix(int64(startTime)+(8*3600), 0).UTC()
+	date := timeObj.Format("2006-01-02")
+
+	now := time.Now().Unix()
+	if now < endTime {
+		endTime = now - 5
+	}
 	
 	{
 		// 获取用户历史首充日期
-		userIdDate := viva_vn_api_dao.ChargeOrdersDao.GetFirstChargeHistoryDate(db.GetFactory("viva_vn_api").GetSession())
+		userIdDate := viva_vn_api_dao.ChargeOrdersDao.GetFirstChargeHistoryDate(db.GetFactory("viva_vn_api").GetSession(), startTime, endTime)
 
 		var buffer bytes.Buffer
 
@@ -44,7 +57,7 @@ func CountFirstCharge() {
 
 		viva_vn_statistics_dao.UserFirstChargeLogDao.BatchInsertOrUpdate(db.GetFactory("viva_vn_statistics").GetSession(), buffer.String())
 
-		log.Info("CountDaily user_first_charge_log day:", " result:", totalCount)
+		log.Info("CountDaily user_first_charge_log day:", " result:", date)
 	}
 
 }

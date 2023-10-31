@@ -163,8 +163,8 @@ func (*chargeOrdersDao) GetChargeOrdersDiamondByTime(session *dbsession.DBSessio
 }
 
 // 获取用户历史首充日期
-func (*chargeOrdersDao) GetFirstChargeHistoryDate(session *dbsession.DBSession) []*chargeOrders {
-	rows, err := session.Query("SELECT t.user_id as user_id, t.create_time AS day, t.price as price, t.price_unit as price_unit, t.diamond as diamond, t.product_id as product_id FROM (SELECT user_id,min(id) as id FROM charge_orders GROUP BY user_id) a LEFT JOIN charge_orders t ON t.user_id=a.user_id and t.id=a.id;")
+func (*chargeOrdersDao) GetFirstChargeHistoryDate(session *dbsession.DBSession, startTime int64, endTime int64) []*chargeOrders {
+	rows, err := session.Query("SELECT user_id, create_time, price, price_unit, diamond, product_id FROM charge_orders WHERE status = 8 AND create_time >= ? AND create_time < ?;", startTime, endTime)
 	if err != nil {
 		log.Error("Failed to query the charge_orders table: ", err.Error())
 		return nil
