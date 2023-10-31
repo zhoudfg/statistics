@@ -55,7 +55,7 @@ func main() {
 	user_first_charge.CountFirstCharge()
 
 	// 第一次先将所有的数据统计一遍，处理后下次重启注掉这段代码
-	var day int64 = 20
+	var day int64 = 120
 	for ; day >= 0; day-- {
 		// 每日用户注册数（区分性别）
 		// user_register_daily.CountDaily(day)

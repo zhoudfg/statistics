@@ -39,11 +39,10 @@ func CountDaily(day int64) {
 		for _, item := range chargeChannels {
 
             channel, ok := channels[item.ProductId.String]
-
 			if !ok {
 				continue
 			}
-
+			
 			if item.ChargeType.String == "google" {
 				googleAndroidQty += 1
 				googleAndroidDiamondQty += item.Diamond
