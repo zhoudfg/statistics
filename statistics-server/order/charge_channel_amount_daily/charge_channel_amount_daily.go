@@ -70,77 +70,75 @@ func CountDaily(day int64) {
 	
 		for _, item := range chargeOrders {
 
-			switch item.PriceUnit.String{
-				case "USD":
-					if item.ChargeType.String == "google" {
-						googleUsdChargeUsers[int(item.UserId)] = int(item.UserId)
-							if item.Status == 8 {
-								googleUsdChargeCompleteUsers[int(item.UserId)] = int(item.UserId)
-								googleUsdChargeAmount += item.Price
-							}
-					}
-					switch item.Channel.String {	
-						case "momo":
-							momoUsdChargeUsers[int(item.UserId)] = int(item.UserId)
-							if item.Status == 8 {
-								momoUsdChargeCompleteUsers[int(item.UserId)] = int(item.UserId)
-								momoUsdChargeAmount += item.Price
-							}
-						case "vietnamVTT":
-							vietnamVTTUsdChargeUsers[int(item.UserId)] = int(item.UserId)
-							if item.Status == 8 {
-								vietnamVTTUsdChargeCompleteUsers[int(item.UserId)] = int(item.UserId)
-								vietnamVTTUsdChargeAmount += item.Price
-							}
-						case "vietnamVMS":
-							vietnamVMSUsdChargeUsers[int(item.UserId)] = int(item.UserId)
-							if item.Status == 8 {
-								vietnamVMSUsdChargeCompleteUsers[int(item.UserId)] = int(item.UserId)
-								vietnamVMUsdChargeAmount += item.Price
-							}
-						case "vietnamVNP":
-							vietnamVNPUsdChargeUsers[int(item.UserId)] = int(item.UserId)
-							if item.Status == 8 {
-								vietnamVNPUsdChargeCompleteUsers[int(item.UserId)] = int(item.UserId)
-								vietnamVNPUsdChargeAmount += item.Price
-							}	
-					}
-				case "VND":
-					if item.ChargeType.String == "google" {
-						googleVndChargeUsers[int(item.UserId)] = int(item.UserId)
-							if item.Status == 8 {
-								googleVndChargeCompleteUsers[int(item.UserId)] = int(item.UserId)
-								googleVndChargeAmount += item.Price
-							}
-					}
-					switch item.Channel.String {	
-						case "momo":
-							momoVndChargeUsers[int(item.UserId)] = int(item.UserId)
-							if item.Status == 8 {
-								momoVndChargeCompleteUsers[int(item.UserId)] = int(item.UserId)
-								momoVndChargeAmount += item.Price
-							}
-						case "vietnamVTT":
-							vietnamVTTVndChargeUsers[int(item.UserId)] = int(item.UserId)
-							if item.Status == 8 {
-								vietnamVTTVndChargeCompleteUsers[int(item.UserId)] = int(item.UserId)
-								vietnamVTTVndChargeAmount += item.Price
-							}
-						case "vietnamVMS":
-							vietnamVMSVndChargeUsers[int(item.UserId)] = int(item.UserId)
-							if item.Status == 8 {
-								vietnamVMSVndChargeCompleteUsers[int(item.UserId)] = int(item.UserId)
-								vietnamVMVndChargeAmount += item.Price
-							}
-						case "vietnamVNP":
-							vietnamVNPVndChargeUsers[int(item.UserId)] = int(item.UserId)
-							if item.Status == 8 {
-								vietnamVNPVndChargeCompleteUsers[int(item.UserId)] = int(item.UserId)
-								vietnamVNPVndChargeAmount += item.Price
-							}	
-					}
-			}
-			
+			if item.PriceUnit.String == "USD" {
+				if item.ChargeType.String == "google" {
+					googleUsdChargeUsers[int(item.UserId)] = int(item.UserId)
+						if item.Status == 8 {
+							googleUsdChargeCompleteUsers[int(item.UserId)] = int(item.UserId)
+							googleUsdChargeAmount += item.Price
+						}
+				}
+				switch item.Channel.String {	
+					case "momo":
+						momoUsdChargeUsers[int(item.UserId)] = int(item.UserId)
+						if item.Status == 8 {
+							momoUsdChargeCompleteUsers[int(item.UserId)] = int(item.UserId)
+							momoUsdChargeAmount += item.Price
+						}
+					case "vietnamVTT":
+						vietnamVTTUsdChargeUsers[int(item.UserId)] = int(item.UserId)
+						if item.Status == 8 {
+							vietnamVTTUsdChargeCompleteUsers[int(item.UserId)] = int(item.UserId)
+							vietnamVTTUsdChargeAmount += item.Price
+						}
+					case "vietnamVMS":
+						vietnamVMSUsdChargeUsers[int(item.UserId)] = int(item.UserId)
+						if item.Status == 8 {
+							vietnamVMSUsdChargeCompleteUsers[int(item.UserId)] = int(item.UserId)
+							vietnamVMUsdChargeAmount += item.Price
+						}
+					case "vietnamVNP":
+						vietnamVNPUsdChargeUsers[int(item.UserId)] = int(item.UserId)
+						if item.Status == 8 {
+							vietnamVNPUsdChargeCompleteUsers[int(item.UserId)] = int(item.UserId)
+							vietnamVNPUsdChargeAmount += item.Price
+						}	
+				}
+			}else if item.PriceUnit.String == "VND" {
+				if item.ChargeType.String == "google" {
+					googleVndChargeUsers[int(item.UserId)] = int(item.UserId)
+						if item.Status == 8 {
+							googleVndChargeCompleteUsers[int(item.UserId)] = int(item.UserId)
+							googleVndChargeAmount += item.Price
+						}
+				}
+				switch item.Channel.String {	
+					case "momo":
+						momoVndChargeUsers[int(item.UserId)] = int(item.UserId)
+						if item.Status == 8 {
+							momoVndChargeCompleteUsers[int(item.UserId)] = int(item.UserId)
+							momoVndChargeAmount += item.Price
+						}
+					case "vietnamVTT":
+						vietnamVTTVndChargeUsers[int(item.UserId)] = int(item.UserId)
+						if item.Status == 8 {
+							vietnamVTTVndChargeCompleteUsers[int(item.UserId)] = int(item.UserId)
+							vietnamVTTVndChargeAmount += item.Price
+						}
+					case "vietnamVMS":
+						vietnamVMSVndChargeUsers[int(item.UserId)] = int(item.UserId)
+						if item.Status == 8 {
+							vietnamVMSVndChargeCompleteUsers[int(item.UserId)] = int(item.UserId)
+							vietnamVMVndChargeAmount += item.Price
+						}
+					case "vietnamVNP":
+						vietnamVNPVndChargeUsers[int(item.UserId)] = int(item.UserId)
+						if item.Status == 8 {
+							vietnamVNPVndChargeCompleteUsers[int(item.UserId)] = int(item.UserId)
+							vietnamVNPVndChargeAmount += item.Price
+						}	
+				}
+			}	
 		}
 
 		var buffer bytes.Buffer
