@@ -57,7 +57,7 @@ func main() {
 		// 记录用户历史首充时间
 		user_first_charge.CountFirstCharge(day)
 		// 每日用户注册数（区分性别）
-		// user_register_daily.CountDaily(day)
+		user_register_daily.CountDaily(day)
 		// 每日登录年龄用户数（区分年龄）
 		// user_activity_age_daily.CountDaily(day)
 		// 每日充值渠道次数（区分渠道、钻石）
@@ -73,19 +73,19 @@ func main() {
 		// 每日vip订单天数
 		// vip_orders_days_daily.CountDaily(day)
 		// 每日钻石消耗类型
-		// diamond_consume_daily.CountDaily(day)
+		diamond_consume_daily.CountDaily(day)
 		// 每日钻石产出类型
 		// diamond_output_daily.CountDaily(day)
 		// 每日作品统计
-		// song.CountDaily(day)
+		song.CountDaily(day)
 		// 每日各版本活动分布
 		// version_activity_daily.CountDaily(day)
 		// 每日用户充值金额
-		charge_amount.CountDaily(day)
+		// charge_amount.CountDaily(day)
 		// 每日用户各渠道充值金额
-		charge_channel_amount_daily.CountDaily(day)
+		// charge_channel_amount_daily.CountDaily(day)
 		// APP人均使用时长
-		app_avg_use_time.CountDaily(day)
+		// app_avg_use_time.CountDaily(day)
 		// 作品发布统计
 		song_release.CountDaily(day)
 		// 作品互动数据统计
