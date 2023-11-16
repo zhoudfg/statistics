@@ -29,6 +29,8 @@ func CountDaily(day int64) {
 		// 每天注册的用户性别 总用户数、男、女、未修改性别
 		users := viva_vn_api.UserDao.GetRegisterUserSexByTime(db.GetFactory("viva_vn_api").GetSession(), startTime, endTime)
 
+		robotUsers := viva_vn_api.UserDao.GetRobotUsers(db.GetFactory("viva_vn_api").GetSession())
+
 		var manUserAndroidQty, womenUserAndroidQty, defaultUserAndroidQty,
 			manUserIosQty, womenUserIosQty, defaultUserIosQty, uuidQty int64
 
@@ -36,7 +38,10 @@ func CountDaily(day int64) {
         userUuid := make(map[string]int, 0)
 
 		for _, item := range users {
-
+			_, ok := robotUsers[item.Id]
+			if ok {
+				continue
+			}
 			if item.Os.String == "android" {
 				switch item.Sex.Int64 {
 				case 1:

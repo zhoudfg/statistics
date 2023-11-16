@@ -28,6 +28,8 @@ func CountDaily(day int64) {
 	{
 		songs := viva_vn_api.SongDao.GetSong2ByTime(db.GetFactory("viva_vn_api").GetSession(), startTime, endTime)
 
+		robotUsers := viva_vn_api.UserDao.GetRobotUsers(db.GetFactory("viva_vn_api").GetSession())
+
 		totalUsers := make(map[int]int, 0)
 		singleSingUsers := make(map[int]int, 0)
 		chrousSingUsers := make(map[int]int, 0)
@@ -35,7 +37,10 @@ func CountDaily(day int64) {
 		var totalQty, singleSingQty, chrousSingQty int
 
 		for _, item := range songs {
-
+			_, ok := robotUsers[item.UserId]
+			if ok {
+				continue
+			}
 			totalUsers[item.UserId] = item.UserId
 			totalQty += 1
 			switch item.IsChorus {

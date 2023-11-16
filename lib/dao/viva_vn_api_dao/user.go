@@ -133,3 +133,26 @@ func (*userDao) GetUsersOverThreeRegisterByTime(session *dbsession.DBSession, st
 
 	return users
 }
+
+func (*userDao) GetRobotUsers(session *dbsession.DBSession) map[int]int {
+	rows, err := session.Query("SELECT id from user where account_type = 1")
+	if err != nil {
+		log.Error("Failed to query the user table: ", err.Error())
+		return nil
+	}
+	defer rows.Close()
+
+	var userId int
+	users := make(map[int]int, 0)
+	for rows.Next() {
+		err := rows.Scan(&userId)
+		if err != nil {
+			log.Error("Failed to scan rows: ", err.Error())
+			return users
+		}
+		users[userId] = userId
+	}
+
+	return users
+}
+

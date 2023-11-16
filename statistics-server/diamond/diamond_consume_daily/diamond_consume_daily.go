@@ -28,9 +28,15 @@ func CountDaily(day int64) {
 	{
 		userDiamondConsume := viva_vn_api.UserDiamondRecordDao.GetConsumeDiamondTypeQtyByTime(db.GetFactory("viva_vn_api").GetSession(), startTime, endTime)
 
+		robotUsers := viva_vn_api.UserDao.GetRobotUsers(db.GetFactory("viva_vn_api").GetSession())
+
 		var sendGiftAndroidQty, sendGiftIosQty, buyVipAndroidQty, buyVipIosQty, diamondRouletteAndroidQty, diamondRouletteIosQty  int64
 
 		for _, item := range userDiamondConsume {
+			_, ok := robotUsers[item.UserId]
+			if ok {
+				continue
+			}
 			switch item.Type {
 			case 200001:
 				if item.Os.String == "android" {

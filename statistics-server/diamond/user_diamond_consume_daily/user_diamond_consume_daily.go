@@ -28,6 +28,8 @@ func CountDaily(day int64) {
 	{
 		userDiamondConsumeRecord := viva_vn_api.UserDiamondRecordDao.GetConsumeDiamondRecordByTime(db.GetFactory("viva_vn_api").GetSession(), startTime, endTime)
 
+		robotUsers := viva_vn_api.UserDao.GetRobotUsers(db.GetFactory("viva_vn_api").GetSession())
+
 		totalConsumeQty := 0
 		totalConsumeUsers := make(map[int]int, 0)
 
@@ -41,6 +43,10 @@ func CountDaily(day int64) {
 		mallConsumeUsers := make(map[int]int, 0)
 
 		for _, item := range userDiamondConsumeRecord {
+			_, ok := robotUsers[item.UserId]
+			if ok {
+				continue
+			}
 			totalConsumeQty += int(item.Qty)
 			totalConsumeUsers[item.UserId] = item.UserId
 			switch item.Type {

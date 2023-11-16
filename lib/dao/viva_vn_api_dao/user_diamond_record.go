@@ -43,7 +43,7 @@ func (*userDiamondRecordDao) GetConsumeDiamondRecordByTime(session *dbsession.DB
 
 // 消耗钻石类型数
 func (*userDiamondRecordDao) GetConsumeDiamondTypeQtyByTime(session *dbsession.DBSession, startTime int64, endTime int64) []*userDiamondRecord {
-	rows, err := session.Query("SELECT type, qty, user_register_info.mobile_os AS os from user_diamond_record LEFT JOIN user_register_info ON user_diamond_record.user_id = user_register_info.user_id WHERE action = 0 AND create_time >= ? AND create_time < ?", startTime, endTime)
+	rows, err := session.Query("SELECT type, qty, user_register_info.mobile_os AS os, user_diamond_record.user_id as user_id from user_diamond_record LEFT JOIN user_register_info ON user_diamond_record.user_id = user_register_info.user_id WHERE action = 0 AND create_time >= ? AND create_time < ?", startTime, endTime)
 	if err != nil {
 		log.Error("Failed to query the user table: ", err.Error())
 		return nil
@@ -53,7 +53,7 @@ func (*userDiamondRecordDao) GetConsumeDiamondTypeQtyByTime(session *dbsession.D
 	consumeDiamond := make([]*userDiamondRecord, 0)
 	for rows.Next() {
 		consume := &userDiamondRecord{}
-		err := rows.Scan(&consume.Type, &consume.Qty, &consume.Os)
+		err := rows.Scan(&consume.Type, &consume.Qty, &consume.Os, &consume.UserId)
 		if err != nil {
 			log.Error("Failed to scan rows: ", err.Error())
 			return nil
@@ -66,7 +66,7 @@ func (*userDiamondRecordDao) GetConsumeDiamondTypeQtyByTime(session *dbsession.D
 
 // 产出钻石类型数
 func (*userDiamondRecordDao) GetOutputDiamondTypeQtyByTime(session *dbsession.DBSession, startTime int64, endTime int64) []*userDiamondRecord {
-	rows, err := session.Query("SELECT type, qty, user_register_info.mobile_os AS os from user_diamond_record LEFT JOIN user_register_info ON user_diamond_record.user_id = user_register_info.user_id where action = 1 AND create_time >= ? AND create_time < ?", startTime, endTime)
+	rows, err := session.Query("SELECT type, qty, user_register_info.mobile_os AS os, user_diamond_record.user_id as user_id from user_diamond_record LEFT JOIN user_register_info ON user_diamond_record.user_id = user_register_info.user_id where action = 1 AND create_time >= ? AND create_time < ?", startTime, endTime)
 	if err != nil {
 		log.Error("Failed to query the user table: ", err.Error())
 		return nil
@@ -76,7 +76,7 @@ func (*userDiamondRecordDao) GetOutputDiamondTypeQtyByTime(session *dbsession.DB
 	outputDiamond := make([]*userDiamondRecord, 0)
 	for rows.Next() {
 		consume := &userDiamondRecord{}
-		err := rows.Scan(&consume.Type, &consume.Qty, &consume.Os)
+		err := rows.Scan(&consume.Type, &consume.Qty, &consume.Os, &consume.UserId)
 		if err != nil {
 			log.Error("Failed to scan rows: ", err.Error())
 			return nil

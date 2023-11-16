@@ -30,6 +30,8 @@ func CountDaily(day int64) {
 		songCommentLists := viva_vn_api.SongCommentDao.GetSongCommentByTime(db.GetFactory("viva_vn_api").GetSession(), startTime, endTime)
 		songGiftConsumelists := viva_vn_api.UserGiftConsumeRecordDao.GetSongSendGiftByTime(db.GetFactory("viva_vn_api").GetSession(), startTime, endTime)
 
+		robotUsers := viva_vn_api.UserDao.GetRobotUsers(db.GetFactory("viva_vn_api").GetSession())
+
 		songCommentUsers := make(map[int]int, 0)
 		
 		songSendGiftUsers := make(map[int]int, 0)
@@ -42,6 +44,10 @@ func CountDaily(day int64) {
 		songSendFreeGiftQty := 0
 		
 		for _, item := range songGiftConsumelists {
+			_, ok := robotUsers[item.UserId]
+			if ok {
+				continue
+			}
 			songSendGiftUsers[item.UserId] = item.UserId
 			songSendGiftQty += item.GiftQty
 
@@ -55,6 +61,10 @@ func CountDaily(day int64) {
 		}
 
 		for _, item := range songCommentLists {
+			_, ok := robotUsers[item.UserId]
+			if ok {
+				continue
+			}
 			songCommentUsers[item.UserId] = item.UserId
 		}
 

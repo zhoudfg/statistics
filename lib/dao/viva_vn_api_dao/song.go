@@ -19,7 +19,7 @@ type song struct{
 }
 
 func (*songDao) GetSongByTime(session *dbsession.DBSession, startTime int64, endTime int64) []*song {
-	rows, err := session.Query("SELECT is_chorus, user_register_info.mobile_os AS os from song LEFT JOIN user_register_info ON user_register_info.user_id = song.user_id where create_time >= ? and create_time < ?", startTime, endTime)
+	rows, err := session.Query("SELECT is_chorus, user_register_info.mobile_os AS os, song.user_id as user_id from song LEFT JOIN user_register_info ON user_register_info.user_id = song.user_id where create_time >= ? and create_time < ?", startTime, endTime)
 	if err != nil {
 		log.Error("Failed to query the song table: ", err.Error())
 		return nil
@@ -29,7 +29,7 @@ func (*songDao) GetSongByTime(session *dbsession.DBSession, startTime int64, end
 	songs := make([]*song, 0)
 	for rows.Next() {
 		s := &song{}
-		err := rows.Scan(&s.IsChorus, &s.Os)
+		err := rows.Scan(&s.IsChorus, &s.Os, &s.UserId)
 		if err != nil {
 			log.Error("Failed to scan rows: ", err.Error())
 			return nil
