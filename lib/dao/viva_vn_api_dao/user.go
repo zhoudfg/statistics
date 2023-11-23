@@ -19,7 +19,7 @@ type userInfo struct {
 }
 
 // 获取当天注册用户
-func (*userDao) GetNewUserByTime(session *dbsession.DBSession, startTime int64, endTime int64) []interface{} {
+func (*userDao) GetNewUserByTime(session *dbsession.DBSession, startTime int64, endTime int64) map[int]int {
 	rows, err := session.Query("SELECT id from user where create_time >= ? and create_time < ?", startTime, endTime)
 	if err != nil {
 		log.Error("Failed to query the user table: ", err.Error())
@@ -27,18 +27,18 @@ func (*userDao) GetNewUserByTime(session *dbsession.DBSession, startTime int64, 
 	}
 	defer rows.Close()
 
-	var Id int64
-	user := make([]interface{}, 0)
+	var userId int
+	userIdMap := make(map[int]int, 0)
 	for rows.Next() {
-		err := rows.Scan(&Id)
+		err := rows.Scan(&userId)
 		if err != nil {
 			log.Error("Failed to scan rows: ", err.Error())
-			return user
+			return userIdMap
 		}
-		user = append(user, Id)
+		userIdMap[userId] = userId
 	}
 
-	return user
+	return userIdMap
 }
 
 // 每天注册用户性别

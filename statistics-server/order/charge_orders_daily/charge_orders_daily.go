@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"time"
 
-	mapset "github.com/deckarep/golang-set"
 	log "github.com/sirupsen/logrus"
 	viva_vn_api "github.com/statistics/lib/dao/viva_vn_api_dao"
 	"github.com/statistics/lib/dao/viva_vn_statistics_dao"
@@ -33,8 +32,6 @@ func CountDaily(day int64) {
 		// 当天注册的新用户
 		user := viva_vn_api.UserDao.GetNewUserByTime(db.GetFactory("viva_vn_api").GetSession(), startTime, endTime)
 
-		var set = mapset.NewSetFromSlice(user)
-
 		var createOrderAndroidQty, completeOrderAndroidQty, uncompleteOrderAndroidQty, createOrderIosQty, completeOrderIosQty, uncompleteOrderIosQty,
 		    createOrderNewUserQty, completeOrderNewUserQty, uncompleteOrderNewUserQty, createOrderOldUserQty, completeOrderOldUserQty, uncompleteOrderOldUserQty int64
 	
@@ -45,7 +42,9 @@ func CountDaily(day int64) {
 				}else if item.Os.String == "ios" {
 					completeOrderIosQty += 1
 				}
-				if set.Contains(item.UserId) {
+
+				_, ok := user[int(item.UserId)]
+				if ok {
 					completeOrderNewUserQty += 1
 				}else{
 					completeOrderOldUserQty += 1
@@ -56,7 +55,8 @@ func CountDaily(day int64) {
 				}else if item.Os.String == "ios" {
 					uncompleteOrderIosQty += 1
 				}
-				if set.Contains(item.UserId) {
+				_, ok := user[int(item.UserId)]
+				if ok {
 					uncompleteOrderNewUserQty += 1
 				}else{
 					uncompleteOrderOldUserQty += 1

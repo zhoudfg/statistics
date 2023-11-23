@@ -25,6 +25,7 @@ import (
 	"github.com/statistics/statistics-server/song/song_release"
 	app_avg_use_time "github.com/statistics/statistics-server/user/app_avg_use_time_daily"
 	"github.com/statistics/statistics-server/user/user_activity_age_daily"
+	"github.com/statistics/statistics-server/user/user_activity_daily"
 	"github.com/statistics/statistics-server/user/user_activity_hourly"
 	"github.com/statistics/statistics-server/user/user_first_charge"
 	"github.com/statistics/statistics-server/user/user_register_daily"
@@ -55,13 +56,13 @@ func main() {
 	var day int64 = 120
 	for ; day >= 0; day-- {
 		// 记录用户历史首充时间
-		user_first_charge.CountFirstCharge(day)
+		// user_first_charge.CountFirstCharge(day)
 		// 每日用户注册数（区分性别）
-		user_register_daily.CountDaily(day)
+		// user_register_daily.CountDaily(day)
 		// 每日登录年龄用户数（区分年龄）
 		// user_activity_age_daily.CountDaily(day)
 		// 每日充值渠道次数（区分渠道、钻石）
-		charge_channel_daily.CountDaily(day)
+		// charge_channel_daily.CountDaily(day)
 		// 每日充值订单状态次数
 		// charge_orders_daily.CountDaily(day)
 		// 每日充值钻石档位
@@ -73,11 +74,11 @@ func main() {
 		// 每日vip订单天数
 		// vip_orders_days_daily.CountDaily(day)
 		// 每日钻石消耗类型
-		diamond_consume_daily.CountDaily(day)
+		// diamond_consume_daily.CountDaily(day)
 		// 每日钻石产出类型
 		// diamond_output_daily.CountDaily(day)
 		// 每日作品统计
-		song.CountDaily(day)
+		// song.CountDaily(day)
 		// 每日各版本活动分布
 		// version_activity_daily.CountDaily(day)
 		// 每日用户充值金额
@@ -87,13 +88,14 @@ func main() {
 		// APP人均使用时长
 		// app_avg_use_time.CountDaily(day)
 		// 作品发布统计
-		song_release.CountDaily(day)
+		// song_release.CountDaily(day)
 		// 作品互动数据统计
-		song_interaction.CountDaily(day)
+		// song_interaction.CountDaily(day)
 		// 钻石消耗类型
-		user_diamond_consume_daily.CountDaily(day)
+		// user_diamond_consume_daily.CountDaily(day)
+		// 用户日活统计
+		user_activity_daily.CountDaily(day)
 
-		
 		// 避免操作数据库过快休眠1s
 		time.Sleep(time.Second)
 	}
@@ -114,6 +116,8 @@ func main() {
 		// 记录用户历史首充时间
 		user_first_charge.CountFirstCharge(0)
 
+		// 用户日活统计
+		user_activity_daily.CountDaily(0)
 		// 每日用户注册数（区分性别）
 		user_register_daily.CountDaily(0)
 		// 每日登录年龄用户数（区分年龄）
@@ -159,7 +163,7 @@ func main() {
 		// 记录用户历史首充时间
 		user_first_charge.CountFirstCharge(1)
 		// 用户日活统计
-		// user_activity_daily.CountDaily(1)
+		user_activity_daily.CountDaily(1)
 		// 每日用户注册数（区分性别）
 		user_register_daily.CountDaily(1)
 		// 每日登录年龄用户数（区分年龄）

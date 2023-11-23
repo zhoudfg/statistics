@@ -1,11 +1,10 @@
-package user
+package user_activity_daily
 
 import (
 	"bytes"
 	"fmt"
 	"time"
 
-	mapset "github.com/deckarep/golang-set"
 	log "github.com/sirupsen/logrus"
 	"github.com/statistics/lib/conf"
 	"github.com/statistics/lib/dao"
@@ -29,12 +28,12 @@ func CountDaily(day int64) {
 	}
 
 	{
-		// 当天活跃的用户
+		// 当天登录的用户
 		activityUser := dao.UserLoginRecordDao.FindList(conf.GetAppId(), startTime, endTime)
 		// 当天注册的新用户
-		user := viva_vn_api.UserDao.GetNewUserByTime(db.GetFactory("viva_vn_api").GetSession(), startTime, endTime)
+		userId := viva_vn_api.UserDao.GetNewUserByTime(db.GetFactory("viva_vn_api").GetSession(), startTime, endTime)
 
-		var set = mapset.NewSetFromSlice(user)
+	
 		var newUserAndroidQty, oldUserAndroidQty, newUserIosQty, oldUserIosQty int64
 		var userIdTeamMap = make(map[int64]int64)
 	
@@ -47,13 +46,15 @@ func CountDaily(day int64) {
 			}
 			switch item.Os {
 				case "android":
-					if set.Contains(item.UserId) {
+					_, ok := userId[int(item.UserId)]
+					if ok {
 						newUserAndroidQty += 1
 					}else{
 						oldUserAndroidQty += 1
 					}
 				case "ios":
-					if set.Contains(item.UserId) {
+					_, ok := userId[int(item.UserId)]
+					if ok {
 						newUserIosQty += 1
 					}else{
 						oldUserIosQty += 1
