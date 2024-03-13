@@ -53,7 +53,7 @@ func main() {
 	c := cron.New()
 
 	// 第一次先将所有的数据统计一遍，处理后下次重启注掉这段代码
-	var day int64 = 100
+	var day int64 = 0
 	for ; day >= 0; day-- {
 		// 记录用户历史首充时间
 		// user_first_charge.CountFirstCharge(day)
