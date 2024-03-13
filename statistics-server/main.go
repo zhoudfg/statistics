@@ -53,7 +53,7 @@ func main() {
 	c := cron.New()
 
 	// 第一次先将所有的数据统计一遍，处理后下次重启注掉这段代码
-	var day int64 = 120
+	var day int64 = 100
 	for ; day >= 0; day-- {
 		// 记录用户历史首充时间
 		// user_first_charge.CountFirstCharge(day)
@@ -94,17 +94,17 @@ func main() {
 		// 钻石消耗类型
 		// user_diamond_consume_daily.CountDaily(day)
 		// 用户日活统计
-		user_activity_daily.CountDaily(day)
+		// user_activity_daily.CountDaily(day)
 
 		// 避免操作数据库过快休眠1s
 		time.Sleep(time.Second)
 	}
 
 	// 第一次先将所有的数据统计一遍，处理后下次重启注掉这段代码
-	var hour int64 = 1440
+	var hour int64 = 100
 	for ; hour >= 0; hour-- {
 		// 用户时活统计
-		// user_activity_hourly.CountHourly(hour)
+		user_activity_hourly.CountHourly(hour)
 	
 		// 避免操作数据库过快休眠1s
 		// time.Sleep(time.Second)

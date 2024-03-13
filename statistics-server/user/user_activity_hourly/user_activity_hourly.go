@@ -29,6 +29,7 @@ func CountHourly(hour int64) {
 	{
 		// 每小时活跃的用户
 		activityUser := dao.UserLoginRecordDao.FindListByHourly(conf.GetAppId(), startTime, endTime)
+		fmt.Println(activityUser)
 		
 		var androidUserQty, iosUserQty, totalUserQty int64
 		var userIdTeamMap = make(map[int64]int64)
