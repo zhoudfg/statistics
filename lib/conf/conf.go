@@ -21,6 +21,61 @@ type Conf struct {
 	Im      map[string]string   `yaml:"im"`
 	Mongo   map[string]string   `yaml:"mongo"`
 	AppId   string              `yaml:"app_id"`
+	Tiktok  TiktokConfig        `yaml:"tiktok"`
+}
+
+type TiktokConfig struct {
+	TokenURL                    string                      `yaml:"token_url"`
+	USTokenURL                  string                      `yaml:"us_token_url"`
+	NonUSTokenURL               string                      `yaml:"non_us_token_url"`
+	BaseURL                     string                      `yaml:"base_url"`
+	Version                     string                      `yaml:"version"`
+	FullVersion                 string                      `yaml:"full_version"`
+	FullCategoryAttrVersion     string                      `yaml:"full_category_attr_version"`
+	FullCronVersion             string                      `yaml:"full_cron_version"`
+	FullListVersion             string                      `yaml:"full_list_version"`
+	FullStockUpOrderVersion     string                      `yaml:"full_stock_up_order_version"`
+	FullStockUpOrderConfVersion string                      `yaml:"full_stock_up_order_conf_version"`
+	AppKey                      string                      `yaml:"app_key"`
+	AppSecret                   string                      `yaml:"app_secret"`
+	ServiceID                   string                      `yaml:"service_id"`
+	AccessToken                 string                      `yaml:"access_token"`
+	RefreshToken                string                      `yaml:"refresh_token"`
+	SellerType                  string                      `yaml:"seller_type"`
+	Region                      string                      `yaml:"region"`
+	ShopCipher                  string                      `yaml:"shop_cipher"`
+	OpenID                      string                      `yaml:"open_id"`
+	ShopSign                    string                      `yaml:"shop_sign"`
+	PlatformTiktokID            string                      `yaml:"platform_tiktok_id"`
+	CategoryVersion             string                      `yaml:"category_version"`
+	Shops                       map[string]TiktokShopConfig `yaml:"shops"`
+}
+
+type TiktokShopConfig struct {
+	ShopType                    int    `yaml:"shop_type"`
+	TokenURL                    string `yaml:"token_url"`
+	USTokenURL                  string `yaml:"us_token_url"`
+	NonUSTokenURL               string `yaml:"non_us_token_url"`
+	BaseURL                     string `yaml:"base_url"`
+	Version                     string `yaml:"version"`
+	FullVersion                 string `yaml:"full_version"`
+	FullCategoryAttrVersion     string `yaml:"full_category_attr_version"`
+	FullCronVersion             string `yaml:"full_cron_version"`
+	FullListVersion             string `yaml:"full_list_version"`
+	FullStockUpOrderVersion     string `yaml:"full_stock_up_order_version"`
+	FullStockUpOrderConfVersion string `yaml:"full_stock_up_order_conf_version"`
+	AppKey                      string `yaml:"app_key"`
+	AppSecret                   string `yaml:"app_secret"`
+	ServiceID                   string `yaml:"service_id"`
+	AccessToken                 string `yaml:"access_token"`
+	RefreshToken                string `yaml:"refresh_token"`
+	SellerType                  string `yaml:"seller_type"`
+	Region                      string `yaml:"region"`
+	ShopCipher                  string `yaml:"shop_cipher"`
+	OpenID                      string `yaml:"open_id"`
+	ShopSign                    string `yaml:"shop_sign"`
+	PlatformTiktokID            string `yaml:"platform_tiktok_id"`
+	CategoryVersion             string `yaml:"category_version"`
 }
 
 var config Conf
@@ -67,6 +122,10 @@ func GetLogLevel() int {
 
 func GetAppId() string {
 	return config.AppId
+}
+
+func GetTiktok() TiktokConfig {
+	return config.Tiktok
 }
 
 func Init(servername string) {

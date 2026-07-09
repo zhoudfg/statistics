@@ -1,15 +1,83 @@
 version:
   0.0.1
 host:
-  mysql: root:123456@tcp(localhost:3306)/viva_vn_api?charset=utf8mb4&parseTime=true
-  mongo: mongodb://127.0.0.1:27017/tianhang_im
+  mysql: root:000000@tcp(127.0.0.1:3306)/erp?charset=utf8mb4&parseTime=true
+#  mongo: mongodb://127.0.0.1:27017/tianhang_im
 mysql:
-  viva_vn_api: root:123456@tcp(localhost:3306)/viva_vn_api?charset=utf8mb4&parseTime=true
-  viva_vn_statistics: root:123456@tcp(localhost:3306)/viva_vn_statistics?charset=utf8mb4&parseTime=true
+  erp: root:000000@tcp(127.0.0.1:3306)/erp?charset=utf8mb4&parseTime=true
 mongo:
-  tianhang_im: mongodb://127.0.0.1:27017/tianhang_im
+#  tianhang_im: mongodb://127.0.0.1:27017/tianhang_im
 log:
   basedir: /usr/local/statistics/log
   level: info
 app_id:
   10028
+tiktok:
+  token_url: https://auth.tiktok-shops.com
+  us_token_url: https://auth-us.tiktok-shops.com
+  non_us_token_url: https://services.tiktokshop.com
+  base_url: https://open-api.tiktokglobalshop.com
+  version: "202309"
+  full_version: "202405"
+  full_category_attr_version: "202507"
+
+  shops:
+    full_all:
+      shop_type: 1
+      seller_type: "ALL"
+      region: "ALL"
+      app_key: "6facsdom75kp0"
+      app_secret: "60a1065282b59376b55075f0dd5091977f191002"
+      service_id: "7470063916833801989"
+      access_token: "ROW_JFRJAwAAAAD7M0xT_rM2Qr_jCUXWjMWZnIwoFPyGx4X6RuMsLgXvnv_HnZGhmgYOS_T3n8sJeoq9pzk-c71nE0Zaxhd1gf-jFYM0u41fUjfBFKAn2RGMMg"
+      platform_tiktok_id: "M4ws_gAAAAAzV-1NupqqkuxC9rcs4vWIFpo-UxxxW34_LTy2cJ9RWA"
+
+    half_cross_border_v1:
+      shop_type: 2
+      locale: 'zh-CN'
+      category_version: "v1"
+      seller_type: "CROSS_BORDER"
+      region: "MX"
+      app_key: "6gb2dqe89gb6c"
+      app_secret: "0d7e00cac1521a1cc9e918d2342aa362b452c594"
+      service_id: "7508701521346135813"
+      access_token: "ROW_nGNtmgAAAADlNa3gut0eoq6U1gIfTnuNayq3HVZRRo7kXCwo8uRBcNjkuLwyIo0w5qsD8shWncc6gzC0Lo0xzXx5fxI8iDLtn9sX7vFMXZS5PtTQpY4VQdBFAEkMD67Jaojy_y0RZ2a5po02haI9HyX2YcDV0Hr6olw7UzqxJxCuiat6XlC03g"
+      platform_tiktok_id: "7494497795527247323"
+
+    half_cross_border_v2:
+      shop_type: 2
+      locale: 'zh-CN'
+      category_version: "v2"
+      seller_type: "CROSS_BORDER"
+      region: "US"
+      app_key: "6d7pkv4l4foti"
+      app_secret: "dc10683a923f8d8f9599343b4ad21a243c5aed24"
+      service_id: "7395505999022622470"
+      access_token: "ROW_De3_UwAAAAD8VlbGrmtYjYctYbn28qU7KQnosXFNiRcJSuI_odlOljzo0_gjGV5xIJfAfeTjSHGCRLo8jLk1suxPp-cY8F6XBHI16Ug_6iH7FOfwLapqstZLvaVdGb7pciZ27pvJHomPdQEZT5-kwAPK_ODv0oYfKjamdjJ6RlqYyEyZx_qSjw"
+      platform_tiktok_id: "7494740143807562844"
+
+    half_local_v1:
+      shop_type: 2
+      locale: 'zh-CN'
+      category_version: "v1"
+      seller_type: "LOCAL"
+      region: "MX"
+      app_key: "6gb2dqe89gb6c"
+      app_secret: "0d7e00cac1521a1cc9e918d2342aa362b452c594"
+      service_id: "7508701521346135813"
+      access_token: "ROW_VC36CAAAAADlNa3gut0eoq6U1gIfTnuNu0x3b2mrNNs4xHLQUN1FWTPw20_8dDJ7tUtOD3DKRwHkg8vmf9pYN3Jsztn1ag449BFd1TR4ARi5TJ2r_JzbKbWXJYyIgxsyfchGDR5HBHfCXrzWAUOk1W809fjPgDz1p6JzaSbGZp4uRI9AHhTJqA"
+      shop_cipher: "ROW_1LALmQAAAABjXLml_QmwJKCJhBeG5i5d"
+
+    half_local_v2:
+      shop_type: 2
+      locale: 'zh-CN'
+      category_version: "v2"
+      seller_type: "LOCAL"
+      region: "US"
+      app_key: "6d7pkv4l4foti"
+      app_secret: "dc10683a923f8d8f9599343b4ad21a243c5aed24"
+      service_id: "7395505999022622470"
+      access_token: "TTP_TMgE2QAAAAD8VlbGrmtYjYctYbn28qU7dD3SldNfcXqykOLfClfZ3Yce93YBYwLsb4NuAcwQo0C4tFdNPvDWcH2z9kFFJJPGoKLuVL4KbDPN6an28m7fHt86EIqbElHynxh3cmGzrNM7eOxHJWGP4cLX53nau9MczwS0rDzr3U4b6Nmabu8q5A"
+      shop_cipher: "TTP_mJngfgAAAACRUnJUqCkWvRsvWszpC9Es"
+      platform_tiktok_id: "7494644038712329238"
+

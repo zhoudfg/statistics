@@ -22,7 +22,7 @@ func Init(dbName string, url string) {
 	}
 
 	mapFactory[dbName] = factory
-	if dbName == "viva_vn_api" {
+	if dbName == "erp" {
 		Factory = factory
 	}
 }
