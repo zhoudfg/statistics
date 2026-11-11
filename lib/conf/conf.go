@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"strings"
 
 	"gopkg.in/yaml.v2"
 )
@@ -22,6 +23,7 @@ type Conf struct {
 	Mongo   map[string]string   `yaml:"mongo"`
 	AppId   string              `yaml:"app_id"`
 	Tiktok  TiktokConfig        `yaml:"tiktok"`
+	Alibaba AlibabaConfig       `yaml:"alibaba"`
 }
 
 type TiktokConfig struct {
@@ -78,6 +80,70 @@ type TiktokShopConfig struct {
 	CategoryVersion             string `yaml:"category_version"`
 }
 
+type AlibabaConfig struct {
+	BaseURL     string                       `yaml:"base_url"`
+	AppKey      string                       `yaml:"app_key"`
+	AppSecret   string                       `yaml:"app_secret"`
+	AccessToken string                       `yaml:"access_token"`
+	DefaultShop string                       `yaml:"default_shop"`
+	Shops       map[string]AlibabaShopConfig `yaml:"shops"`
+}
+
+type AlibabaShopConfig struct {
+	BaseURL     string `yaml:"base_url"`
+	AppKey      string `yaml:"app_key"`
+	AppSecret   string `yaml:"app_secret"`
+	AccessToken string `yaml:"access_token"`
+}
+
+func (c AlibabaConfig) ResolveShop(name string) (AlibabaShopConfig, error) {
+	name = strings.TrimSpace(name)
+	if name == "" {
+		name = c.DefaultShop
+	}
+	if name == "" {
+		if len(c.Shops) > 1 {
+			return AlibabaShopConfig{}, fmt.Errorf("multiple 1688 shops configured; specify -shop or alibaba.default_shop")
+		}
+		for shopName := range c.Shops {
+			name = shopName
+		}
+	}
+
+	var shop AlibabaShopConfig
+	if name != "" {
+		var ok bool
+		shop, ok = c.Shops[name]
+		if !ok {
+			return AlibabaShopConfig{}, fmt.Errorf("1688 shop %q not found in alibaba.shops", name)
+		}
+	}
+
+	fields := []struct {
+		name     string
+		value    *string
+		fallback string
+	}{
+		{"base_url", &shop.BaseURL, c.BaseURL},
+		{"app_key", &shop.AppKey, c.AppKey},
+		{"app_secret", &shop.AppSecret, c.AppSecret},
+		{"access_token", &shop.AccessToken, c.AccessToken},
+	}
+	var missing []string
+	for _, field := range fields {
+		if strings.TrimSpace(*field.value) == "" {
+			*field.value = field.fallback
+		}
+		if strings.TrimSpace(*field.value) == "" {
+			missing = append(missing, field.name)
+		}
+	}
+	if len(missing) > 0 {
+		return AlibabaShopConfig{}, fmt.Errorf("missing 1688 config fields: %s", strings.Join(missing, ", "))
+	}
+	return shop, nil
+}
+
 var config Conf
 
 func GetMongo(name string) string {
@@ -126,6 +192,10 @@ func GetAppId() string {
 
 func GetTiktok() TiktokConfig {
 	return config.Tiktok
+}
+
+func GetAlibaba() AlibabaConfig {
+	return config.Alibaba
 }
 
 func Init(servername string) {

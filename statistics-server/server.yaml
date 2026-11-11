@@ -12,6 +12,15 @@ log:
   level: info
 app_id:
   10028
+alibaba:
+  base_url: https://erp-alibaba.westmonth.com/openapi
+  default_shop: 'b2b-2215149677196ea9c1'
+  shops:
+    default:
+      app_key: '5570272'
+      app_secret: 'biGLC4vbQ8v5'
+      access_token: '2a9a1841-5514-4a53-a727-ff6430e5694b'
+
 tiktok:
   token_url: https://auth.tiktok-shops.com
   us_token_url: https://auth-us.tiktok-shops.com
